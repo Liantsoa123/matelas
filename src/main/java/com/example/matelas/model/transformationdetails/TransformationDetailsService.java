@@ -1,4 +1,4 @@
-package com.example.matelas.transformationdetails;
+package com.example.matelas.model.transformationdetails;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

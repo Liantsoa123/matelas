@@ -1,4 +1,4 @@
-package com.example.matelas.block;
+package com.example.matelas.model.block;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.example.matelas.forme;
+package com.example.matelas.model.forme;
 
-import com.example.matelas.block.Block;
+import com.example.matelas.model.block.Block;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;

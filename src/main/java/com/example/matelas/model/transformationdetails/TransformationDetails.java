@@ -1,7 +1,7 @@
-package com.example.matelas.transformationdetails;
+package com.example.matelas.model.transformationdetails;
 
-import com.example.matelas.forme.FormUsuelle;
-import com.example.matelas.transformation.Transformation;
+import com.example.matelas.model.forme.FormUsuelle;
+import com.example.matelas.model.transformation.Transformation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;

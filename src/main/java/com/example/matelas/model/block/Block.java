@@ -1,4 +1,4 @@
-package com.example.matelas.block;
+package com.example.matelas.model.block;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

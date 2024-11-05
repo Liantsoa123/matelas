@@ -1,4 +1,4 @@
-package com.example.matelas.forme;
+package com.example.matelas.model.forme;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
