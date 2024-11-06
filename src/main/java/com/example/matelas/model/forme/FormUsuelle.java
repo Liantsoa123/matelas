@@ -14,7 +14,7 @@ public class FormUsuelle {
     private double epaisseur;
     private double prixVente;
      @Transient
-     private int quantiteTransformation = 0 ;
+     private int quantiteTransformation = 0;
 
 
     public FormUsuelle() {
