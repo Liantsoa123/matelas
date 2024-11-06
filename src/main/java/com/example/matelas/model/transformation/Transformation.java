@@ -1,9 +1,11 @@
 package com.example.matelas.model.transformation;
 
 import com.example.matelas.model.block.Block;
+import com.example.matelas.model.forme.FormUsuelle;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 public class Transformation {
@@ -20,6 +22,9 @@ public class Transformation {
     private Block reste;
 
     private Date dateTransformation;
+
+    @Transient
+    private List<FormUsuelle> formUsuelles ;
 
     public Transformation() {
     }
@@ -61,5 +66,13 @@ public class Transformation {
 
     public void setDateTransformation(Date dateTransformation) {
         this.dateTransformation = dateTransformation;
+    }
+
+    public List<FormUsuelle> getFormUsuelles() {
+        return formUsuelles;
+    }
+
+    public void setFormUsuelles(List<FormUsuelle> formUsuelles) {
+        this.formUsuelles = formUsuelles;
     }
 }
