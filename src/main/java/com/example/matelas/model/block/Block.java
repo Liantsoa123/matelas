@@ -89,4 +89,8 @@ public class Block {
     public void setId(int id) {
         this.id = id;
     }
+    public  String getName (){
+        return "L="+this.getLongueur()+"/l="+this.getLargeur()+"/e="+getEpaisseur()+"/V="+volume();
+
+    }
 }

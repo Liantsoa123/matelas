@@ -20,6 +20,7 @@ public class BlockService {
     public List<Block> getAllBlocks() {
         return blockRepository.findAll();
     }
+    
 
     // Get a block by ID
     public Optional<Block> getBlockById(int id) {

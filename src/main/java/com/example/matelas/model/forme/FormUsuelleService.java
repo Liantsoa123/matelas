@@ -37,7 +37,6 @@ public class FormUsuelleService {
             formUsuelle.setLongueur(formUsuelleDetails.getLongueur());
             formUsuelle.setLargeur(formUsuelleDetails.getLargeur());
             formUsuelle.setEpaisseur(formUsuelleDetails.getEpaisseur());
-            formUsuelle.setBlock(formUsuelleDetails.getBlock());
             formUsuelle.setPrixVente(formUsuelleDetails.getPrixVente());
             return formUsuelleRepository.save(formUsuelle);
         }).orElseThrow(() -> new RuntimeException("FormUsuelle not found with id " + id));

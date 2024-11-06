@@ -8,24 +8,25 @@ public class FormUsuelle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private  String name ;
     private double longueur;
     private double largeur;
     private double epaisseur;
     private double prixVente;
+     @Transient
+     private int quantiteTransformation = 0 ;
 
-    @ManyToOne
-    @JoinColumn(name = "block_id")
-    private Block block;
 
     public FormUsuelle() {
     }
 
-    public FormUsuelle(int id, double longueur, double largeur, double epaisseur, Block block, double prixVente) {
+    public FormUsuelle(int id, String name, double longueur, double largeur, double epaisseur, double prixVente) {
         this.id = id;
+        this.name = name;
         this.longueur = longueur;
         this.largeur = largeur;
         this.epaisseur = epaisseur;
-        this.block = block;
+
         this.prixVente = prixVente;
     }
 
@@ -61,13 +62,6 @@ public class FormUsuelle {
         this.epaisseur = epaisseur;
     }
 
-    public Block getBlock() {
-        return block;
-    }
-
-    public void setBlock(Block block) {
-        this.block = block;
-    }
 
     public double getPrixVente() {
         return prixVente;
@@ -79,5 +73,21 @@ public class FormUsuelle {
 
     public double volume() {
         return this.getLongueur() * this.getLargeur() * this.getEpaisseur();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getQuantiteTransformation() {
+        return quantiteTransformation;
+    }
+
+    public void setQuantiteTransformation(int quantiteTransformation) {
+        this.quantiteTransformation = quantiteTransformation;
     }
 }
