@@ -2,14 +2,12 @@ package com.example.matelas.model.transformationdetails;
 
 import com.example.matelas.model.forme.FormUsuelle;
 import com.example.matelas.model.transformation.Transformation;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class TransformationDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne

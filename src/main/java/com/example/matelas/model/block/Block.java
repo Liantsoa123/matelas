@@ -1,13 +1,13 @@
 package com.example.matelas.model.block;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;  // Import for @ManyToOne if using relationships
+import jakarta.persistence.*;
+
 import java.sql.Date;
 
 @Entity
 public class Block {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double longueur;
     private double largeur;
@@ -24,6 +24,7 @@ public class Block {
         this.prixRevient = prixRevient;
         this.creationBlock = creationBlock;
         this.mere = null;
+        this.id = 0 ;
     }
 
     public Block() {
@@ -79,5 +80,13 @@ public class Block {
 
     public double volume() {
         return this.getLongueur() * this.getLargeur() * this.getEpaisseur();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -1,14 +1,12 @@
 package com.example.matelas.model.forme;
 
 import com.example.matelas.model.block.Block;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class FormUsuelle {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double longueur;
     private double largeur;
