@@ -13,21 +13,26 @@ import java.util.List;
 
 @Controller
 public class BlockController {
-    @Autowired
-    private BlockService blockService;
+    private final BlockService blockService;
 
-    @GetMapping("/blockForm")
-    public String showForm(Model model) {
-        model.addAttribute("block", new Block());
-        List<Block> blocks = blockService.getAllBlocks();
-        model.addAttribute("blocks", blocks);
-        return "blockform";
+    public BlockController(BlockService blockService) {
+        this.blockService = blockService;
     }
 
     // Handle the form submission
     @PostMapping("/saveBlock")
     public String saveBlock(@ModelAttribute Block block) {
         blockService.saveBlock(block);
-        return "redirect:/blockForm";
+        return "redirect:/block";
     }
+
+
+    @GetMapping("/block")
+    public String formBlock(Model model) {
+        model.addAttribute("message", "Insertion Block");
+        model.addAttribute("block" , new Block());
+        return "bolck";
+    }
+
+
 }
