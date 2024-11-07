@@ -91,6 +91,8 @@ public class Block {
     }
     public  String getName (){
         return "L="+this.getLongueur()+"/l="+this.getLargeur()+"/e="+getEpaisseur()+"/V="+volume();
-
+    }
+    public  void setPrixRevient (){
+        double prixRevient = (volume()* mere.getPrixRevient()) / mere.volume() ;
     }
 }

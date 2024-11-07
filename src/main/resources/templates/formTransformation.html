@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Transformation</title>
+    <link rel="stylesheet" type="text/css" href="/css/formTransformation.css"> <!-- Adjust path as necessary -->
+</head>
+<body>
+<h1>Insert New Transformation</h1>
+<form th:action="@{/saveTransformation}" th:object="${transformation}"  method="post">
+    <!-- Display error message if it exists -->
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Mere Block field (dropdown select) -->
+    <label for="mere">Mere Block:</label>
+    <select th:field="*{mere.id}" id="mere">
+        <option th:each="m : ${listBlock}" th:value="${m.id}" th:text="${m.getName()}">Select Block</option>
+    </select><br />
+
+    <!-- Date Transformation field -->
+    <label for="dateTransformation">Date of Transformation:</label>
+    <input type="date" th:field="*{dateTransformation}" id="dateTransformation"  required /><br />
+
+    <!-- Reste Block (new input fields for Block properties) -->
+    <h3>New Reste Block Dimensions</h3>
+    <div class="reste-dimensions-row">
+        <div class="reste-dimension">
+            <label for="resteLongueur">Longueur:</label>
+            <input type="number" step="0.01" th:field="*{reste.longueur}" id="resteLongueur" />
+        </div>
+        <div class="reste-dimension">
+            <label for="resteLargeur">Largeur:</label>
+            <input type="number" step="0.01" th:field="*{reste.largeur}" id="resteLargeur" />
+        </div>
+        <div class="reste-dimension">
+            <label for="resteEpaisseur">Epaisseur:</label>
+            <input type="number" step="0.01" th:field="*{reste.epaisseur}" id="resteEpaisseur" />
+        </div>
+    </div>
+
+    <!-- FormUsuelle list and quantiteTransformation input -->
+    <h3>FormUsuelle Quantities</h3>
+    <div th:each="f : ${transformation.formUsuelles}">
+        <label th:for="*{formUsuelles[__${fStat.index}__].quantiteTransformation}"
+               th:text="|${f.name}  (${f.volume()})|" >Quantity: </label>
+        <input type="number" th:field="*{formUsuelles[__${fStat.index}__].quantiteTransformation}" />
+        <br />
+    </div>
+
+
+
+    <!-- Submit Button -->
+    <button type="submit">Save Transformation</button>
+</form>
+
+
+</body>
+</html>

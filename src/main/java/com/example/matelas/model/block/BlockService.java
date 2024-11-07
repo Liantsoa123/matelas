@@ -27,6 +27,12 @@ public class BlockService {
         return blockRepository.findById(id);
     }
 
+
+    public List<Block> getBlocksNotInMereId() {
+        return blockRepository.findBlocksNotInMereId();
+    }
+
+
     // Save a new block
     public Block saveBlock(Block block) {
         return blockRepository.save(block);
@@ -52,5 +58,9 @@ public class BlockService {
         } else {
             throw new RuntimeException("Block not found with id " + id);
         }
+    }
+
+    public Optional<Block> getBlocksByMereId(Integer mereId) {
+        return blockRepository.findBlocksByMereId(mereId);
     }
 }

@@ -5,6 +5,7 @@ import com.example.matelas.model.forme.FormUsuelle;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Transformation {
     private Date dateTransformation;
 
     @Transient
-    private List<FormUsuelle> formUsuelles ;
+    private List<FormUsuelle> formUsuelles = new ArrayList<>() ;
 
     public Transformation() {
     }
