@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Block</title>
     <link rel="stylesheet" href="/css/blockform.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
 </head>
 <body>
+<!-- Sidebar inclusion -->
+<div th:replace="sidebar :: sidebar"></div>
+
+
 <h1 th:text="${message}"> </h1>
 <form th:action="@{/saveBlock}" th:object="${block}" method="post">
     <!-- Longueur field -->

@@ -3,8 +3,12 @@
 <head>
     <title>Create Transformation</title>
     <link rel="stylesheet" type="text/css" href="/css/formTransformation.css"> <!-- Adjust path as necessary -->
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
 </head>
 <body>
+<!-- Sidebar inclusion -->
+<div th:replace="sidebar :: sidebar"></div>
+
 <h1>Insert New Transformation</h1>
 <form th:action="@{/saveTransformation}" th:object="${transformation}"  method="post">
     <!-- Display error message if it exists -->
