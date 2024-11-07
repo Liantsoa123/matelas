@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
     <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
 </head>
 <body>
 
@@ -13,14 +13,26 @@
 
 <!-- Main content area -->
 <div class="main-content">
-    <h1>Total Sales Value of Transformations</h1>
+    <h1>Total Prix de Vente en stock </h1>
 
     <!-- Display the total sales value if it exists -->
     <div>
         <p>Total Sales Value: <span th:text="${totalValeurVente != null ? totalValeurVente : 'Data not available'}">0.0</span></p>
     </div>
 
+    <h1>FormUsuelle meilleure prix vente  </h1>
+    <div>
+        <p>Name: <span th:text="${bestRatio.name}"></span></p>
+        <p>Prix de Vente: <span th:text="${bestRatio.prixVente}"></span></p>
+        <p>Volume: <span th:text="${bestRatio.volume()}"></span></p>
+        <p>Price-to-Volume Ratio: <span th:text="${bestRatio.rationVenteVolum()}"></span></p>
+    </div>
 
+    <h1> Form plus petite   <span th:text="${formPetit.get().getName()}" >name</span> </h1>
+    <div>
+        <p> Quantite: <span th:text="${quantite}" >quantite</span> </p>
+        <p> Prix de Vente Total : <span th:text="${prixTotalVente}" >prixTotalVente</span> </p>
+    </div>
 </div>
 
 </body>

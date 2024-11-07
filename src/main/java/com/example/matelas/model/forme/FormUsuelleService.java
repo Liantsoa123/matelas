@@ -3,6 +3,7 @@ package com.example.matelas.model.forme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,5 +50,15 @@ public class FormUsuelleService {
         } else {
             throw new RuntimeException("FormUsuelle not found with id " + id);
         }
+    }
+
+    public  FormUsuelle bestRationVenteVolumn (){
+            List<FormUsuelle> formUsuelles = formUsuelleRepository.findAll();
+            return formUsuelles.stream()
+                    .max(Comparator.comparing(FormUsuelle::rationVenteVolum))
+                    .orElseThrow(() -> new IllegalStateException("No FormUsuelle found"));
+    }
+    public Optional<FormUsuelle> getFormUsuelleWithSmallestVolume() {
+        return formUsuelleRepository.findTopBySmallestVolume();
     }
 }

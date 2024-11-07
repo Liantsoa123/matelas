@@ -3,6 +3,8 @@ package com.example.matelas.model.forme;
 import com.example.matelas.model.block.Block;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class FormUsuelle {
     @Id
@@ -91,5 +93,16 @@ public class FormUsuelle {
         this.quantiteTransformation = quantiteTransformation;
     }
 
+    public  double rationVenteVolum(){
+        return  getPrixVente() / volume() ;
+    }
+
+    public  int getQuantiteReste (List<Block>  allRestBlock){
+        int q = 0 ;
+        for (Block rest : allRestBlock){
+            q += rest.volume() / volume() ;
+        }
+        return  q ;
+    }
 
 }

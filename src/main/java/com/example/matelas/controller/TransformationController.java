@@ -126,7 +126,9 @@ public class TransformationController {
             // Insert Transformation Details
             for (FormUsuelle formUsuelle : formUsuelles) {
                 TransformationDetails transformationDetails = new TransformationDetails(0, formUsuelle, transformation , formUsuelle.getQuantiteTransformation());
-                transformationDetailsService.saveTransformationDetails(transformationDetails);
+                if ( transformationDetails.getQuantite() > 0 ){
+                    transformationDetailsService.saveTransformationDetails(transformationDetails);
+                }
             }
         } catch (Exception e) {
             // Log the error if needed
