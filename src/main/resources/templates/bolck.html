@@ -13,6 +13,7 @@
 
 <h1 th:text="${message}"> </h1>
 <form th:action="@{/saveBlock}" th:object="${block}" method="post">
+    <input type="hidden"  th:field="*{id}" >
     <!-- Longueur field -->
     <label for="longueur">Longueur:</label>
     <input type="number" step="0.01" th:field="*{longueur}" id="longueur" /><br />

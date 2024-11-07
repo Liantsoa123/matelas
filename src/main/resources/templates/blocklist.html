@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Blocks</title>
+    <link rel="stylesheet" th:href="@{/css/blocklist.css}" />
+</head>
+<body>
+<!-- Sidebar inclusion -->
+
+<h1>All Blocks</h1>
+
+<!-- Table to display all blocks -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Longueur</th>
+        <th>Largeur</th>
+        <th>Epaisseur</th>
+        <th>Prix Revient</th>
+        <th>Creation Date</th>
+        <th>Actions</th> <!-- Add a column for actions -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="block : ${blocks}">
+        <td th:text="${block.id}"></td>
+        <td th:text="${block.longueur}"></td>
+        <td th:text="${block.largeur}"></td>
+        <td th:text="${block.epaisseur}"></td>
+        <td th:text="${block.prixRevient}"></td>
+        <td th:text="${block.creationBlock}"></td>
+        <!-- Modify Button -->
+        <td>
+            <a th:href="@{/edit-block/{id}(id=${block.id})}" class="btn-modify">Modify</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
