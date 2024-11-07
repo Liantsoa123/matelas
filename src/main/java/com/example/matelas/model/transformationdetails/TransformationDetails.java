@@ -18,15 +18,18 @@ public class TransformationDetails {
     @JoinColumn(name = "transformation_id")
     private Transformation transformation;
 
+    private  int quantite ;
+
     private double prixRevient;
 
     public TransformationDetails() {
     }
 
-    public TransformationDetails(int id, FormUsuelle usuelle, Transformation transformation) {
+    public TransformationDetails(int id, FormUsuelle usuelle, Transformation transformation, int quantite) {
         this.id = id;
         this.usuelle = usuelle;
         this.transformation = transformation;
+        this.quantite = quantite;
         this.setPrixRevient();
     }
 
@@ -68,5 +71,13 @@ public class TransformationDetails {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
     }
 }
