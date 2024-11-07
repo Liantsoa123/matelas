@@ -1,8 +1,12 @@
 package com.example.matelas.model.block;
 
+import com.example.matelas.controller.BlockController;
+import com.example.matelas.model.transformation.Transformation;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Block {
@@ -93,6 +97,10 @@ public class Block {
         return "L="+this.getLongueur()+"/l="+this.getLargeur()+"/e="+getEpaisseur()+"/V="+volume();
     }
     public  void setPrixRevient (){
-        double prixRevient = (volume()* mere.getPrixRevient()) / mere.volume() ;
+        prixRevient = (volume()* mere.getPrixRevient()) / mere.volume() ;
     }
+
+
+
+
 }

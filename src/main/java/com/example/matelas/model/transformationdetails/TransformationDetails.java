@@ -46,6 +46,9 @@ public class TransformationDetails {
         return prixRevient;
     }
 
+    public  void setPrixRevient (double p){
+        this.prixRevient = p ;
+    }
 
     public void setPrixRevient() {
         if (this.usuelle != null && this.transformation != null && this.transformation.getMere() != null) {

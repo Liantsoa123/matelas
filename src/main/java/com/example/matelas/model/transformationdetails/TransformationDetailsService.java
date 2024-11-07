@@ -53,4 +53,7 @@ public class TransformationDetailsService {
         return transformationDetailsRepository.getTotalValeurVente();
     }
 
+    public List<TransformationDetails> getTransformationDetailsByTransformationId(int transformationId) {
+        return transformationDetailsRepository.findAllByTransformationId(transformationId);
+    }
 }

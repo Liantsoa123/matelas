@@ -1,5 +1,6 @@
 package com.example.matelas.model.block;
 
+import com.example.matelas.model.transformation.Transformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,8 @@ public class BlockService {
     public List<Block> getAllBlocks() {
         return blockRepository.findAll();
     }
-    
+
+
 
     // Get a block by ID
     public Optional<Block> getBlockById(int id) {
@@ -31,6 +33,9 @@ public class BlockService {
     public List<Block> getBlocksNotInMereId() {
         return blockRepository.findBlocksNotInMereId();
     }
+    public  List<Block> getAllPrinicpalMere(){
+        return blockRepository.findBlocksIsMere();};
+
 
 
     // Save a new block
@@ -63,4 +68,5 @@ public class BlockService {
     public Optional<Block> getBlocksByMereId(Integer mereId) {
         return blockRepository.findBlocksByMereId(mereId);
     }
+
 }
