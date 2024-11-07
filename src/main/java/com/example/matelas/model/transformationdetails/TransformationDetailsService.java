@@ -48,4 +48,9 @@ public class TransformationDetailsService {
             throw new RuntimeException("TransformationDetails not found with id " + id);
         }
     }
+
+    public Double calculateTotalValeurVente() {
+        return transformationDetailsRepository.getTotalValeurVente();
+    }
+
 }

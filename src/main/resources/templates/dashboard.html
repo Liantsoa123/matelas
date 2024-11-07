@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
+</head>
+<body>
+
+<!-- Sidebar inclusion -->
+<div th:replace="sidebar :: sidebar"></div>
+
+<!-- Main content area -->
+<div class="main-content">
+    <h1>Total Sales Value of Transformations</h1>
+
+    <!-- Display the total sales value if it exists -->
+    <div>
+        <p>Total Sales Value: <span th:text="${totalValeurVente != null ? totalValeurVente : 'Data not available'}">0.0</span></p>
+    </div>
+
+
+</div>
+
+</body>
+</html>

@@ -90,4 +90,6 @@ public class FormUsuelle {
     public void setQuantiteTransformation(int quantiteTransformation) {
         this.quantiteTransformation = quantiteTransformation;
     }
+
+
 }
