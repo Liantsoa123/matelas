@@ -23,7 +23,6 @@ public class BlockService {
     }
 
 
-
     // Get a block by ID
     public Optional<Block> getBlockById(int id) {
         return blockRepository.findById(id);
@@ -33,10 +32,10 @@ public class BlockService {
     public List<Block> getBlocksNotInMereId() {
         return blockRepository.findBlocksNotInMereId();
     }
-    public  List<Block> getAllPrinicpalMere(){
-        return blockRepository.findBlocksIsMere();};
 
-
+    public List<Block> getAllPrinicpalMere() {
+        return blockRepository.findBlocksIsMere();
+    }
 
     // Save a new block
     public Block saveBlock(Block block) {

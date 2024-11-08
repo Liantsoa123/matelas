@@ -60,7 +60,7 @@ public class TransformationService {
     }
 
     public Transformation findAllTransformationByMereBlockId(int idMere) {
-        Optional<Transformation> transformationOpt = transformationRepository.findAllTransformationsByMereBlockId(idMere);
+        Optional<Transformation> transformationOpt = transformationRepository.findTransformationsByMereBlockId(idMere);
         return transformationOpt.orElse(null);  // Returns the Transformation if present, otherwise returns null
     }
 

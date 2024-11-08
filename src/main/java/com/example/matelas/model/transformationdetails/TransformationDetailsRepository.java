@@ -16,4 +16,7 @@ public interface TransformationDetailsRepository extends JpaRepository<Transform
     @Query("SELECT td FROM TransformationDetails td WHERE td.transformation.id = :transformationId")
     List<TransformationDetails> findAllByTransformationId(@Param("transformationId") int transformationId);
 
+    @Query("SELECT td FROM TransformationDetails td WHERE td.usuelle.id = :usuelleid")
+    List<TransformationDetails> findAllByUsuelleId(@Param("usuelleid") int usuelleid);
+
 }

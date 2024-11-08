@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface TransformationRepository extends JpaRepository<Transformation, Integer> {
     @Query("SELECT t FROM Transformation t WHERE   t.mere.id = :blockMereId")
-    Optional<Transformation> findAllTransformationsByMereBlockId(@Param("blockMereId") int  blockMereId);
+    Optional<Transformation> findTransformationsByMereBlockId(@Param("blockMereId") int  blockMereId);
 
 }

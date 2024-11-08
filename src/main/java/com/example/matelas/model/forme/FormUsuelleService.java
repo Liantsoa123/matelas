@@ -1,5 +1,9 @@
 package com.example.matelas.model.forme;
 
+import com.example.matelas.model.block.Block;
+import com.example.matelas.model.transformation.TransformationService;
+import com.example.matelas.model.transformationdetails.TransformationDetails;
+import com.example.matelas.model.transformationdetails.TransformationDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +15,14 @@ import java.util.Optional;
 public class FormUsuelleService {
 
     private final FormUsuelleRepository formUsuelleRepository;
+    private final TransformationDetailsService transformationDetailsService;
+    private final TransformationService transformationService;
 
     @Autowired
-    public FormUsuelleService(FormUsuelleRepository formUsuelleRepository) {
+    public FormUsuelleService(FormUsuelleRepository formUsuelleRepository, TransformationDetailsService transformationDetailsService, TransformationService transformationService) {
         this.formUsuelleRepository = formUsuelleRepository;
+        this.transformationDetailsService = transformationDetailsService;
+        this.transformationService = transformationService;
     }
 
     // Get all FormUsuelle
@@ -52,13 +60,40 @@ public class FormUsuelleService {
         }
     }
 
-    public  FormUsuelle bestRationVenteVolumn (){
-            List<FormUsuelle> formUsuelles = formUsuelleRepository.findAll();
-            return formUsuelles.stream()
-                    .max(Comparator.comparing(FormUsuelle::rationVenteVolum))
-                    .orElseThrow(() -> new IllegalStateException("No FormUsuelle found"));
+    public FormUsuelle bestRationVenteVolumn() {
+        List<FormUsuelle> formUsuelles = formUsuelleRepository.findAll();
+        return formUsuelles.stream()
+                .max(Comparator.comparing(FormUsuelle::rationVenteVolum))
+                .orElseThrow(() -> new IllegalStateException("No FormUsuelle found"));
     }
+
     public Optional<FormUsuelle> getFormUsuelleWithSmallestVolume() {
         return formUsuelleRepository.findTopBySmallestVolume();
+    }
+
+    public double cump(int idUsuelle) {
+        List<TransformationDetails> transformationDetails = transformationDetailsService.findAllByUsuelleId(idUsuelle);
+        double q = 0;
+        double someQR = 0;
+        for (TransformationDetails td : transformationDetails) {
+            someQR += td.getPrixRevient() * td.getQuantite();
+            q += td.getQuantite();
+        }
+        return someQR / q;
+    }
+
+    public double quantite(int idusuelle) {
+        List<TransformationDetails> transformationDetails = transformationDetailsService.findAllByUsuelleId(idusuelle);
+        double q = 0;
+        for (TransformationDetails td : transformationDetails) {
+
+            q += td.getQuantite();
+        }
+        return q;
+    }
+
+    public Block  getBlockSrd (  int idFormUsuelle){
+        List<TransformationDetails> td = transformationDetailsService.findAllByUsuelleId(idFormUsuelle);
+
     }
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All FormUsuelle</title>
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
+    <link rel="stylesheet" th:href="@{/css/formUsuelleList.css}" />
+</head>
+<body>
+
+
+<h1>All FormUsuelle</h1>
+
+<!-- Table to display all FormUsuelle -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Prix Vente</th>
+        <th>Volume</th>
+        <th>Quantity</th>
+        <th>Prix de Revient</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="formUsuelle : ${formUsuelles}">
+        <td th:text="${formUsuelle.id}"></td>
+        <td th:text="${formUsuelle.name}"></td>
+        <td th:text="${formUsuelle.prixVente}"></td>
+        <td th:text="${formUsuelle.volume}"></td>
+        <td th:text="${formServie.quantite(formUsuelle.getId())}"></td>
+        <td th:text="${formServie.cump(formUsuelle.getId())}"></td>
+        <td>
+            <!-- Example actions -->
+            <a th:href="@{/formUsuelle/{id}(id=${formUsuelle.id})}" class="btn-modify">Details</a>
+
+        </td>
+
+
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.example.matelas.model.transformationdetails;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,4 +57,10 @@ public class TransformationDetailsService {
     public List<TransformationDetails> getTransformationDetailsByTransformationId(int transformationId) {
         return transformationDetailsRepository.findAllByTransformationId(transformationId);
     }
+
+    public List<TransformationDetails> findAllByUsuelleId(int uselleid){
+        return transformationDetailsRepository.findAllByUsuelleId(uselleid);
+
+    }
+
 }

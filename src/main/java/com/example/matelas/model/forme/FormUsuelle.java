@@ -1,6 +1,7 @@
 package com.example.matelas.model.forme;
 
 import com.example.matelas.model.block.Block;
+import com.example.matelas.model.transformationdetails.TransformationDetails;
 import jakarta.persistence.*;
 
 import java.util.List;
