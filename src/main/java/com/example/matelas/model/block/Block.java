@@ -13,6 +13,7 @@ public class Block {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private  String name ;
     private double longueur;
     private double largeur;
     private double epaisseur;
@@ -21,7 +22,8 @@ public class Block {
     @ManyToOne
     private Block mere;
 
-    public Block(double longueur, double largeur, double epaisseur, double prixRevient, Date creationBlock) {
+    public Block(String name, double longueur, double largeur, double epaisseur, double prixRevient, Date creationBlock) {
+        this.name = name;
         this.longueur = longueur;
         this.largeur = largeur;
         this.epaisseur = epaisseur;
@@ -93,16 +95,16 @@ public class Block {
     public void setId(int id) {
         this.id = id;
     }
-    public  String getName (){
-        return "L="+this.getLongueur()+"/l="+this.getLargeur()+"/e="+getEpaisseur()+"/V="+volume();
-    }
+
     public  void setPrixRevient (){
         prixRevient = (volume()* mere.getPrixRevient()) / mere.volume() ;
     }
 
 
-
-
-
-
+    public void setName(String name) {
+        this.name = name;
+    }
+    public  String getName(){
+        return  name ;
+    }
 }
