@@ -15,6 +15,11 @@
 <form th:action="@{/saveBlock}" th:object="${block}" method="post">
     <input type="hidden"  th:field="*{id}" >
     <!-- Longueur field -->
+    <div th:if="${id==null}">
+
+    <label for="name">Name:</label>
+    <input type="text"  th:field="*{name}" id="name" /><br />
+
     <label for="longueur">Longueur:</label>
     <input type="number" step="0.01" th:field="*{longueur}" id="longueur" /><br />
 
@@ -26,13 +31,16 @@
     <label for="epaisseur">Epaisseur:</label>
     <input type="number" step="0.01" th:field="*{epaisseur}" id="epaisseur" /><br />
 
+
+            <!-- Creation Block field (Date) -->
+            <label for="creationBlock">Creation Block:</label>
+            <input type="date" th:field="*{creationBlock}" id="creationBlock" /><br />
+    </div>
     <!-- Prix Revient field -->
     <label for="prixRevient">Prix Revient:</label>
     <input type="number" step="0.01" th:field="*{prixRevient}" id="prixRevient" /><br />
 
-    <!-- Creation Block field (Date) -->
-    <label for="creationBlock">Creation Block:</label>
-    <input type="date" th:field="*{creationBlock}" id="creationBlock" /><br />
+
 
     <!-- Submit Button -->
     <button type="submit">Save Block</button>

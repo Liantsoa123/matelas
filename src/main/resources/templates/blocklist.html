@@ -15,6 +15,7 @@
     <thead>
     <tr>
         <th>ID</th>
+        <th>Name</th>
         <th>Longueur</th>
         <th>Largeur</th>
         <th>Epaisseur</th>
@@ -26,6 +27,7 @@
     <tbody>
     <tr th:each="block : ${blocks}">
         <td th:text="${block.id}"></td>
+        <td th:text="${block.name}"></td>
         <td th:text="${block.longueur}"></td>
         <td th:text="${block.largeur}"></td>
         <td th:text="${block.epaisseur}"></td>
