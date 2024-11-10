@@ -66,4 +66,8 @@ public class TransformationDetailsService {
         return transformationDetailsRepository.findAllByBlockIdRecursive(blockId);
     }
 
+    public Double findSumQuantiteByBlockIdAndUsuelleId(int blockId, int idUsuelle){
+        return transformationDetailsRepository.findSumQuantiteByBlockIdAndUsuelleId(blockId, idUsuelle);
+    }
+
 }
