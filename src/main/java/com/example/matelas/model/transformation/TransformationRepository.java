@@ -13,4 +13,7 @@ public interface TransformationRepository extends JpaRepository<Transformation, 
     @Query("SELECT t FROM Transformation t WHERE   t.mere.id = :blockMereId")
     Optional<Transformation> findTransformationsByMereBlockId(@Param("blockMereId") int  blockMereId);
 
+    @Query("SELECT t FROM Transformation t WHERE   t.reste.id = :blockResteId")
+    Optional<Transformation> findTransformationsByResteBlockId(@Param("blockResteId") int  blockResteId);
+
 }

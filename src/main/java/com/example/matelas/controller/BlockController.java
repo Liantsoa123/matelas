@@ -30,9 +30,9 @@ public class BlockController {
             blockService.saveBlock(block);
         }else {
             System.out.println("update  "+block.getId());
-            System.out.println(  "id transformation ="+ transformationService.findAllTransformationByMereBlockId(block.getId()).getId());
+            System.out.println(  "id transformation ="+ transformationService.findTransformationByMereBlockId(block.getId()).getId());
 
-            transformationService.updatePrixRevient( block.getPrixRevient() , block );
+            transformationService.updatePrixRevient( block.getPrixRevient() , block.getId());
             //blockService.updateBlock(block.getId(), block);
         }
         return "redirect:/block";

@@ -59,11 +59,17 @@ public class TransformationController {
             i++;
         }
 
+
         //Get Block mere
         Optional<Block> mere = blockService.getBlockById(transformation.getMere().getId());
 
         //Check 2% of reste
         double allReste = mere.get().volume() - totalVoulumeUsuelles - transformation.getReste().volume();
+        System.out.println("allReste="+allReste);
+        System.out.println("mere="+mere.get().volume());
+        System.out.println("totalVoulumeUsuelles="+totalVoulumeUsuelles);
+        System.out.println("reste="+transformation.getReste().volume());
+
         double pourcentage = allReste * 100 / mere.get().volume();
         System.out.println(pourcentage);
 
@@ -81,7 +87,7 @@ public class TransformationController {
             return "formTransformation";
         }
 
-        if ( pourcentage > 2 ){
+        if ( pourcentage > 30 ){
             String error = "Perte supérieure à 2%";
             model.addAttribute("error", error);
             List<Block> listBlock = blockService.getBlocksNotInMereId();
@@ -94,8 +100,6 @@ public class TransformationController {
             model.addAttribute("transformation", t);
             return "formTransformation";
         }
-
-
         try {
             //insert all
             saveTransformationData( transformation , formUsuelles , mere );

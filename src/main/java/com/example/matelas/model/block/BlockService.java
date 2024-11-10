@@ -1,7 +1,9 @@
 package com.example.matelas.model.block;
 
 import com.example.matelas.model.transformation.Transformation;
+import com.example.matelas.model.transformation.TransformationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +14,12 @@ public class BlockService {
 
     private final BlockRepository blockRepository;
 
+    private final TransformationService transformationService;
+
     @Autowired
-    public BlockService(BlockRepository blockRepository) {
+    public BlockService(BlockRepository blockRepository, @Lazy TransformationService transformationService) {
         this.blockRepository = blockRepository;
+        this.transformationService = transformationService;
     }
 
     // Get all blocks
@@ -66,6 +71,20 @@ public class BlockService {
 
     public Optional<Block> getBlocksByMereId(Integer mereId) {
         return blockRepository.findBlocksByMereId(mereId);
+    }
+
+    public  Block getBLockSrc( int idBLock ){
+        Transformation t = transformationService.findTransformationbyIDReste(idBLock);
+        if ( t == null ){
+            System.out.println("Block src found "+idBLock);
+            return getBlockById(idBLock).get();
+        }
+        Block mere = null;
+        while ( t!=null ){
+            mere = t.getMere();
+            t = transformationService.findTransformationbyIDReste(mere.getId());
+        }
+        return  mere ;
     }
 
 }

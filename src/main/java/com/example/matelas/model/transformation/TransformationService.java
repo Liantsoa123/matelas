@@ -7,7 +7,6 @@ import com.example.matelas.model.transformationdetails.TransformationDetailsServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +14,8 @@ import java.util.Optional;
 public class TransformationService {
 
     private final TransformationRepository transformationRepository;
-    private  final TransformationDetailsService transformationDetailsService ;
-    private  final BlockService blockService ;
+    private final TransformationDetailsService transformationDetailsService;
+    private final BlockService blockService;
 
     @Autowired
     public TransformationService(TransformationRepository transformationRepository, TransformationDetailsService transformationDetailsService, BlockService blockService) {
@@ -59,19 +58,26 @@ public class TransformationService {
         }
     }
 
-    public Transformation findAllTransformationByMereBlockId(int idMere) {
+    public Transformation findTransformationByMereBlockId(int idMere) {
         Optional<Transformation> transformationOpt = transformationRepository.findTransformationsByMereBlockId(idMere);
         return transformationOpt.orElse(null);  // Returns the Transformation if present, otherwise returns null
     }
 
+    public Transformation findTransformationbyIDReste(int idreste) {
+        Optional<Transformation> t = transformationRepository.findTransformationsByResteBlockId(idreste);
+        return  t.orElse(null);
+    }
 
-    public void updatePrixRevient(double newPrixRevient, Block mere) {
-        double rapport = newPrixRevient / mere.getPrixRevient();
-        mere.setPrixRevient(newPrixRevient);  // Update the 'mere' block's price
-        blockService.updateBlock(mere.getId() , mere);
+
+    public void updatePrixRevient(double newPrixRevient, int idmere) {
+        Optional<Block> mere = blockService.getBlockById(idmere);
+        double rapport = newPrixRevient / mere.get().getPrixRevient();
+        System.out.println("Rapport: " + rapport);
+        mere.get().setPrixRevient(newPrixRevient);  // Update the 'mere' block's price
+        blockService.updateBlock(mere.get().getId(), mere.orElse(null));
 
         // Retrieve the first transformation for the mere block
-        Transformation transformation = findAllTransformationByMereBlockId(mere.getId());
+        Transformation transformation = findTransformationByMereBlockId(mere.get().getId());
 
         // Iterate through each transformation and its child blocks
         while (transformation != null) {
@@ -79,7 +85,7 @@ public class TransformationService {
             if (child != null) {
                 // Update the prixRevient for the child block based on the rapport
                 child.setPrixRevient(child.getPrixRevient() * rapport);
-                blockService.updateBlock(child.getId() , child) ;
+                blockService.updateBlock(child.getId(), child);
 
                 // Update each TransformationDetails for the current transformation
                 List<TransformationDetails> transformationDetails = transformationDetailsService
@@ -90,7 +96,7 @@ public class TransformationService {
                 }
             }
             // Move to the next child transformation
-            transformation = findAllTransformationByMereBlockId(child.getId());
+            transformation = findTransformationByMereBlockId(child.getId());
         }
     }
 
