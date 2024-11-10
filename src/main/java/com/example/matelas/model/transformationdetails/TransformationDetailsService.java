@@ -60,7 +60,10 @@ public class TransformationDetailsService {
 
     public List<TransformationDetails> findAllByUsuelleId(int uselleid){
         return transformationDetailsRepository.findAllByUsuelleId(uselleid);
+    }
 
+    public List<TransformationDetails> findAllByBlockIdRecursive(int blockId){
+        return transformationDetailsRepository.findAllByBlockIdRecursive(blockId);
     }
 
 }

@@ -117,6 +117,7 @@ public class TransformationController {
         try {
             // Insert Reste
             Block reste = transformation.getReste();
+            reste.setName(mere.get().getName() + "-R");
             reste.setMere(mere.get());
             reste.setCreationBlock(transformation.getDateTransformation());
             reste.setPrixRevient();
