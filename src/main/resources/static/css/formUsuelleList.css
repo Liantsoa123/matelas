@@ -1,13 +1,14 @@
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+
 }
 
 h1 {
-    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
 }
 
 table {
@@ -44,4 +45,12 @@ td {
 
 .btn-delete {
     background-color: #f44336;
+}
+
+
+table  {
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
