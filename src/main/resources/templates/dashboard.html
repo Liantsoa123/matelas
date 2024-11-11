@@ -16,12 +16,12 @@
     <h1>Total Prix de Vente en stock </h1>
 
     <!-- Display the total sales value if it exists -->
-    <div>
+    <div class="info" >
         <p>Total Sales Value: <span th:text="${totalValeurVente != null ? totalValeurVente : 'Data not available'}">0.0</span></p>
     </div>
 
     <h1>FormUsuelle meilleure prix vente  </h1>
-    <div>
+    <div class="info" >
         <p>Name: <span th:text="${bestRatio.name}"></span></p>
         <p>Prix de Vente: <span th:text="${bestRatio.prixVente}"></span></p>
         <p>Volume: <span th:text="${bestRatio.volume()}"></span></p>
@@ -29,7 +29,7 @@
     </div>
 
     <h1> Form plus petite   <span th:text="${formPetit.get().getName()}" >name</span> </h1>
-    <div>
+    <div class="info">
         <p> Quantite: <span th:text="${quantite}" >quantite</span> </p>
         <p> Prix de Vente Total : <span th:text="${prixTotalVente}" >prixTotalVente</span> </p>
     </div>
