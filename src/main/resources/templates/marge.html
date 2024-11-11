@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Marge</title>
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
+    <link rel="stylesheet" href="/css/blockform.css">
+
+
+</head>
+<body>
+<!-- Sidebar inclusion -->
+<div th:replace="sidebar :: sidebar"></div>
+
+<h1>Edit Marge</h1>
+<form th:action="@{/editmarge}" th:object="${marge}" method="post">
+    <label>ID:</label>
+    <input type="text" th:field="*{id}" readonly/><br/>
+    <label>Marge:</label>
+    <input type="number" th:field="*{marge}" required step="0.01"/><br/>
+    <button type="submit">Update</button>
+</form>
+</body>
+</html>

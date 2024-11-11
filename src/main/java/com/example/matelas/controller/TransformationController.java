@@ -4,6 +4,8 @@ import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.forme.FormUsuelle;
 import com.example.matelas.model.forme.FormUsuelleService;
+import com.example.matelas.model.marge.Marge;
+import com.example.matelas.model.marge.MargeService;
 import com.example.matelas.model.transformation.Transformation;
 import com.example.matelas.model.transformation.TransformationService;
 import com.example.matelas.model.transformationdetails.TransformationDetails;
@@ -24,12 +26,14 @@ public class TransformationController {
     private final BlockService blockService;
     private final FormUsuelleService formUsuelleService ;
     private final TransformationDetailsService transformationDetailsService;
+    private final MargeService margeService;
 
-    public TransformationController(TransformationService transformationService, BlockService blockService, FormUsuelleService formUsuelleService, TransformationDetailsService transformationDetailsService) {
+    public TransformationController(TransformationService transformationService, BlockService blockService, FormUsuelleService formUsuelleService, TransformationDetailsService transformationDetailsService, MargeService margeService) {
         this.transformationService = transformationService;
         this.blockService = blockService;
         this.formUsuelleService = formUsuelleService;
         this.transformationDetailsService = transformationDetailsService;
+        this.margeService = margeService;
     }
 
     @GetMapping("/formTransformation")
@@ -87,8 +91,11 @@ public class TransformationController {
             return "formTransformation";
         }
 
-        if ( pourcentage > 30 ){
-            String error = "Perte supérieure à 2%";
+        Marge marge = margeService.findMargeById(1).get();
+
+
+        if ( pourcentage >  marge.getMarge()){
+            String error = "Perte supérieure à "+marge.getMarge();
             model.addAttribute("error", error);
             List<Block> listBlock = blockService.getBlocksNotInMereId();
             List<FormUsuelle> formUsuelleList = formUsuelleService.getAllFormUsuelles();
@@ -98,6 +105,7 @@ public class TransformationController {
             t.setDateTransformation(transformation.getDateTransformation());
             model.addAttribute("listBlock", listBlock);
             model.addAttribute("transformation", t);
+
             return "formTransformation";
         }
         try {
