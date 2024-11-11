@@ -56,6 +56,7 @@ public class BlockService {
             block.setPrixRevient(blockDetails.getPrixRevient());
             block.setCreationBlock(blockDetails.getCreationBlock());
             block.setMere(blockDetails.getMere());
+            block.setName(blockDetails.getName());
             return blockRepository.save(block);
         }).orElseThrow(() -> new RuntimeException("Block not found with id " + id));
     }

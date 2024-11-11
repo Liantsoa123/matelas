@@ -1,6 +1,7 @@
 package com.example.matelas.model.forme;
 
 import com.example.matelas.model.block.Block;
+import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.transformation.TransformationService;
 import com.example.matelas.model.transformationdetails.TransformationDetails;
 import com.example.matelas.model.transformationdetails.TransformationDetailsService;
@@ -18,12 +19,14 @@ public class FormUsuelleService {
     private final FormUsuelleRepository formUsuelleRepository;
     private final TransformationDetailsService transformationDetailsService;
     private final TransformationService transformationService;
+    private final BlockService blockService;
 
     @Autowired
-    public FormUsuelleService(FormUsuelleRepository formUsuelleRepository, TransformationDetailsService transformationDetailsService, TransformationService transformationService) {
+    public FormUsuelleService(FormUsuelleRepository formUsuelleRepository, TransformationDetailsService transformationDetailsService, TransformationService transformationService, BlockService blockService) {
         this.formUsuelleRepository = formUsuelleRepository;
         this.transformationDetailsService = transformationDetailsService;
         this.transformationService = transformationService;
+        this.blockService = blockService;
     }
 
     // Get all FormUsuelle
@@ -92,9 +95,13 @@ public class FormUsuelleService {
         }
         return q;
     }
-
-  /*  public HashMap<Block , FormUsuelle> getAllSrc (  int idFormUsuelle){
-        List<TransformationDetails> td = transformationDetailsService.findAllByUsuelleId(idFormUsuelle);
-
-    }*/
+    public HashMap<Block , Double> getAllSrc (  int idFormUsuelle){
+        List<Block> blockSrc = blockService.getAllPrinicpalMere();
+        HashMap<Block , Double> src = new HashMap<>();
+        for ( Block block : blockSrc){
+            double q = transformationDetailsService.findSumQuantiteByBlockIdAndUsuelleId(block.getId(), idFormUsuelle);
+            src.put(block , q);
+        }
+        return  src;
+    }
 }

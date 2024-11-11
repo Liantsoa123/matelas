@@ -67,7 +67,8 @@ public class TransformationDetailsService {
     }
 
     public Double findSumQuantiteByBlockIdAndUsuelleId(int blockId, int idUsuelle){
-        return transformationDetailsRepository.findSumQuantiteByBlockIdAndUsuelleId(blockId, idUsuelle);
+        Double sum = transformationDetailsRepository.findSumQuantiteByBlockIdAndUsuelleId(blockId, idUsuelle);
+        return (sum != null) ? sum : 0.0; // Return 0.0 if the sum is null
     }
 
 }

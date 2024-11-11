@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>FormUsuelle Details</title>
+    <link rel="stylesheet" th:href="@{/css/formUsuelleDetail.css}" />
+</head>
+<body>
+<!-- Header -->
+<h1>FormUsuelle Details</h1>
+
+<!-- FormUsuelle Information -->
+<section>
+    <h2>FormUsuelle Information</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <td th:text="${formUsuelle.id}"></td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td th:text="${formUsuelle.name}"></td>
+        </tr>
+        <tr>
+            <th>Prix Vente</th>
+            <td th:text="${formUsuelle.prixVente}"></td>
+        </tr>
+        <tr>
+            <th>Volume</th>
+            <td th:text="${formUsuelle.volume}"></td>
+        </tr>
+        <!-- Add more fields as needed -->
+    </table>
+</section>
+
+<!-- Block Quantities Table -->
+<section>
+    <h2>Block Quantities</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Block ID</th>
+            <th>Name</th>
+            <th>Longueur</th>
+            <th>Largeur</th>
+            <th>Epaisseur</th>
+            <th>Prix Revient</th>
+            <th>Quantite</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${blockQuantite}">
+            <td th:text="${entry.key.id}"></td>
+            <td th:text="${entry.key.name}"></td>
+            <td th:text="${entry.key.longueur}"></td>
+            <td th:text="${entry.key.largeur}"></td>
+            <td th:text="${entry.key.epaisseur}"></td>
+            <td th:text="${entry.key.prixRevient}"></td>
+            <td th:text="${entry.value}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
