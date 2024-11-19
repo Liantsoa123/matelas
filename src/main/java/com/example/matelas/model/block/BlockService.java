@@ -116,6 +116,4 @@ public class BlockService {
         System.out.println("Insertion finished");
     }
 
-
-
 }
