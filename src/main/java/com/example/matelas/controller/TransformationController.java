@@ -4,6 +4,7 @@ import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.forme.FormUsuelle;
 import com.example.matelas.model.forme.FormUsuelleService;
+import com.example.matelas.model.machine.Machine;
 import com.example.matelas.model.marge.Marge;
 import com.example.matelas.model.marge.MargeService;
 import com.example.matelas.model.transformation.Transformation;
@@ -77,7 +78,7 @@ public class TransformationController {
         //Get Block mere
         Optional<Block> mere = blockService.getBlockById(transformation.getMere().getId());
 
-        Block reste = new Block(mere.get().getName() +"R",longueurResteInMeters , largeurResteInMeters , hauteurResteInMeters , 0 , transformation.getDateTransformation());
+        Block reste = new Block(mere.get().getName() +"R",longueurResteInMeters , largeurResteInMeters , hauteurResteInMeters , 0 , transformation.getDateTransformation() , new Machine());
         transformation.setReste(reste);
 
         //Check 2% of reste

@@ -71,7 +71,6 @@
 			<version>1.10.0</version> <!-- Use the latest version -->
 		</dependency>
 
-
 	</dependencies>
 
 	<build>

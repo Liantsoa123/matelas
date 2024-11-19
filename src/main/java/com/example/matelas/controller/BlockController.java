@@ -2,12 +2,18 @@ package com.example.matelas.controller;
 
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
+import com.example.matelas.model.csv.CsvService;
 import com.example.matelas.model.transformation.TransformationService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +21,13 @@ import java.util.Optional;
 public class BlockController {
     private final BlockService blockService;
     private  final TransformationService transformationService ;
+    private static final String UPLOADED_FOLDER = "uploads/";
+    private final CsvService csvService;
 
-    public BlockController(BlockService blockService, TransformationService transformationService) {
+    public BlockController(BlockService blockService, TransformationService transformationService, CsvService csvService) {
         this.blockService = blockService;
         this.transformationService = transformationService;
+        this.csvService = csvService;
     }
 
     // Handle the form submission
@@ -62,10 +71,25 @@ public class BlockController {
     }
 
     @PostMapping("/importCsv")
-    public String importCsv(@RequestParam("pathCsv" )String pathCsv ){
-        System.out.println("Path Csv = " + pathCsv);
-        blockService.importCsv(pathCsv);
-        return  "redirect:/block" ;
+    public String handleFileUpload(@RequestParam("filecsv") MultipartFile file, Model model) {
+        if (file.isEmpty()) {
+            model.addAttribute("message", "No file selected for upload.");
+            return "upload";
+        }
+
+        try {
+            // Process the file content without saving it
+            String query = csvService.cvsToQueryBlock(file.getInputStream());
+            System.out.println("Generated Query: " + query);
+            blockService.importCsv(query);
+
+            System.out.println("File processed successfully!");
+
+        } catch (Exception e) {
+           System.out.println( "File processing failed: " + e.getMessage());
+        }
+
+        return "redirect:/block"; // Return to the upload page
     }
 
 }

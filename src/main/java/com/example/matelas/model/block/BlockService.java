@@ -102,11 +102,20 @@ public class BlockService {
         return  mere ;
     }
 
-    @Transactional
+    /*@Transactional
     public void importCsv (  String csvPath  ){
         String query = csvService.cvsToQueryBlock(csvPath);
         System.out.println("Query = "+query);
         entityManager.createNativeQuery(query).executeUpdate();
         System.out.println("Insertion finished");
+    }*/
+
+    @Transactional
+    public void importCsv (String query){
+        entityManager.createNativeQuery(query).executeUpdate();
+        System.out.println("Insertion finished");
     }
+
+
+
 }
