@@ -10,12 +10,15 @@ import com.example.matelas.model.transformation.Transformation;
 import com.example.matelas.model.transformation.TransformationService;
 import com.example.matelas.model.transformationdetails.TransformationDetails;
 import com.example.matelas.model.transformationdetails.TransformationDetailsService;
+import com.example.matelas.model.util.MeasurementConverter;
+import org.hibernate.annotations.Parameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,16 +47,18 @@ public class TransformationController {
         t.setFormUsuelles(formUsuelleList);
         model.addAttribute("listBlock", listBlock);
         model.addAttribute("transformation", t);
-
-
-
         return  "formTransformation";
     }
 
     @PostMapping("/saveTransformation")
     public String saveTransformation(@ModelAttribute Transformation transformation,
-                                     Model model) {
+                                     Model model,
+                                     @RequestParam(name="longueurReste") String longueurReste,
+                                     @RequestParam(name="larguerReste") String largeurReste,
+                                     @RequestParam(name="epaisseurReste") String hauteurReste
+                                     ) {
         List<FormUsuelle> formUsuelles = formUsuelleService.getAllFormUsuelles();
+
         int i =  0 ;
         double totalVoulumeUsuelles = 0;
         for (FormUsuelle formUsuelle : transformation.getFormUsuelles()) {
@@ -62,10 +67,18 @@ public class TransformationController {
             totalVoulumeUsuelles += formUsuelles.get(i).volume() * formUsuelles.get(i).getQuantiteTransformation() ;
             i++;
         }
+        double longueurResteInMeters = MeasurementConverter.convertToMeters(longueurReste);
+        System.out.println("longueurResteInMeters="+longueurResteInMeters);
+        double largeurResteInMeters = MeasurementConverter.convertToMeters(largeurReste);
+        double hauteurResteInMeters = MeasurementConverter.convertToMeters(hauteurReste);
+
 
 
         //Get Block mere
         Optional<Block> mere = blockService.getBlockById(transformation.getMere().getId());
+
+        Block reste = new Block(mere.get().getName() +"R",longueurResteInMeters , largeurResteInMeters , hauteurResteInMeters , 0 , transformation.getDateTransformation());
+        transformation.setReste(reste);
 
         //Check 2% of reste
         double allReste = mere.get().volume() - totalVoulumeUsuelles - transformation.getReste().volume();
@@ -73,6 +86,9 @@ public class TransformationController {
         System.out.println("mere="+mere.get().volume());
         System.out.println("totalVoulumeUsuelles="+totalVoulumeUsuelles);
         System.out.println("reste="+transformation.getReste().volume());
+        System.out.println("longueurResteInMeters="+longueurResteInMeters);
+
+
 
         double pourcentage = allReste * 100 / mere.get().volume();
         System.out.println(pourcentage);
