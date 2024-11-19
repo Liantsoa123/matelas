@@ -1,6 +1,7 @@
 package com.example.matelas.model.block;
 
 import com.example.matelas.controller.BlockController;
+import com.example.matelas.model.machine.Machine;
 import com.example.matelas.model.transformation.Transformation;
 import jakarta.persistence.*;
 
@@ -21,8 +22,11 @@ public class Block {
     private Date creationBlock;
     @ManyToOne
     private Block mere;
+    @ManyToOne
+    @JoinColumn(name = "machine_id")
+    private Machine machine;
 
-    public Block(String name, double longueur, double largeur, double epaisseur, double prixRevient, Date creationBlock) {
+    public Block(String name, double longueur, double largeur, double epaisseur, double prixRevient, Date creationBlock , Machine machine) {
         this.name = name;
         this.longueur = longueur;
         this.largeur = largeur;
@@ -31,6 +35,7 @@ public class Block {
         this.creationBlock = creationBlock;
         this.mere = null;
         this.id = 0 ;
+        this.machine = machine;
     }
 
     public Block() {
@@ -100,11 +105,19 @@ public class Block {
         prixRevient = (volume()* mere.getPrixRevient()) / mere.volume() ;
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
     public  String getName(){
         return  name ;
+    }
+
+
+    public Machine getMachine() {
+        return machine;
+    }
+
+    public void setMachine(Machine machine) {
+        this.machine = machine;
     }
 }

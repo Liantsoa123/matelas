@@ -12,7 +12,7 @@ import org.apache.commons.csv.CSVRecord;
 @Service
 public class CsvService {
     public String cvsToQueryBlock(String filePath) {
-        StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name) VALUES ");
+        StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name , machine_id) VALUES ");
 
         try (FileReader reader = new FileReader(filePath);
              CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
@@ -24,7 +24,8 @@ public class CsvService {
                         .append(record.get("epaisseur")).append(", ")
                         .append(record.get("prix_revient")).append(", ")
                         .append("'").append(record.get("creation_block")).append("', ")
-                        .append("'").append(record.get("name")).append("'), ");
+                        .append("'").append(record.get("name")).append("',")
+                        .append(record.get("machine_id")).append("), ");
             }
 
             // Remove trailing comma and space
