@@ -47,6 +47,11 @@ public class BlockService {
         return blockRepository.save(block);
     }
 
+    public Block saveBlockAutoName(Block block){
+        block.setName("block"+blockRepository.getNextSequence());
+        return  blockRepository.save(block);
+    }
+
     // Update an existing block
     public Block updateBlock(int id, Block blockDetails) {
         return blockRepository.findById(id).map(block -> {

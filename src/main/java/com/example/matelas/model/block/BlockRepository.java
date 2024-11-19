@@ -17,4 +17,8 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
     @Query("SELECT b FROM Block b WHERE b.mere.id IS null ")
     List<Block> findBlocksIsMere();
 
+    @Query(value = "SELECT nextval('block_id_seq')", nativeQuery = true)
+    long getNextSequence();
+
+
 }
