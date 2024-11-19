@@ -1,11 +1,15 @@
 package com.example.matelas.model.block;
 
+import com.example.matelas.model.csv.CsvService;
 import com.example.matelas.model.transformation.Transformation;
 import com.example.matelas.model.transformation.TransformationService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Driver;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +19,16 @@ public class BlockService {
     private final BlockRepository blockRepository;
 
     private final TransformationService transformationService;
+    private final CsvService csvService;
+
+    private final EntityManager entityManager ;
 
     @Autowired
-    public BlockService(BlockRepository blockRepository, @Lazy TransformationService transformationService) {
+    public BlockService(BlockRepository blockRepository, @Lazy TransformationService transformationService, CsvService csvService, EntityManager entityManager) {
         this.blockRepository = blockRepository;
         this.transformationService = transformationService;
+        this.csvService = csvService;
+        this.entityManager = entityManager;
     }
 
     // Get all blocks
@@ -93,4 +102,11 @@ public class BlockService {
         return  mere ;
     }
 
+    @Transactional
+    public void importCsv (  String csvPath  ){
+        String query = csvService.cvsToQueryBlock(csvPath);
+        System.out.println("Query = "+query);
+        entityManager.createNativeQuery(query).executeUpdate();
+        System.out.println("Insertion finished");
+    }
 }

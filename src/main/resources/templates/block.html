@@ -45,5 +45,12 @@
     <button type="submit">Save Block</button>
 </form>
 
+<h1>Import Csv</h1>
+<form th:action="@{/importCsv}"  method="post"   >
+    <label for="pathCsv"> Enter your file path </label>
+    <input type="text" id="pathCsv" name="pathCsv" value="C:\Users\rakot\OneDrive\Documents\S5\Architecture Logiciel\matelas\csv\block.csv"  >
+    <button type="submit">Import</button>
+</form>
+
 </body>
 </html>

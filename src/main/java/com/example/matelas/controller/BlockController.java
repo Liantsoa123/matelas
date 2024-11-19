@@ -3,12 +3,10 @@ package com.example.matelas.controller;
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.transformation.TransformationService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +40,7 @@ public class BlockController {
     public String formBlock(Model model) {
         model.addAttribute("message", "Insertion Block");
         model.addAttribute("block" , new Block());
-        return "bolck";
+        return "block";
     }
 
     @GetMapping("/getAllBolck")
@@ -58,8 +56,16 @@ public class BlockController {
         if (block.isPresent()) {
             model.addAttribute("message", "Edit Block");
             model.addAttribute("block", block.get());
-            return "bolck";
+            return "block";
         }
         return "redirect:/getAllBolck";
     }
+
+    @PostMapping("/importCsv")
+    public String importCsv(@RequestParam("pathCsv" )String pathCsv ){
+        System.out.println("Path Csv = " + pathCsv);
+        blockService.importCsv(pathCsv);
+        return  "redirect:/block" ;
+    }
+
 }
