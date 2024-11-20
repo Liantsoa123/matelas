@@ -25,6 +25,8 @@ public class Block {
     @ManyToOne
     @JoinColumn(name = "machine_id")
     private Machine machine;
+    private double prixTheorique;
+
 
     public Block(String name, double longueur, double largeur, double epaisseur, double prixRevient, Date creationBlock , Machine machine) {
         this.name = name;
@@ -36,6 +38,7 @@ public class Block {
         this.mere = null;
         this.id = 0 ;
         this.machine = machine;
+
     }
 
     public Block() {
@@ -89,6 +92,14 @@ public class Block {
         this.creationBlock = creationBlock;
     }
 
+    public double getPrixTheorique() {
+        return prixTheorique;
+    }
+
+    public void setPrixTheorique(double prixTheorique) {
+        this.prixTheorique = prixTheorique;
+    }
+
     public double volume() {
         return this.getLongueur() * this.getLargeur() * this.getEpaisseur();
     }
@@ -104,15 +115,12 @@ public class Block {
     public  void setPrixRevient (){
         prixRevient = (volume()* mere.getPrixRevient()) / mere.volume() ;
     }
-
     public void setName(String name) {
         this.name = name;
     }
     public  String getName(){
         return  name ;
     }
-
-
     public Machine getMachine() {
         return machine;
     }
@@ -121,4 +129,7 @@ public class Block {
         this.machine = machine;
     }
 
+   /* public double prixTheorique(){
+
+    }*/
 }
