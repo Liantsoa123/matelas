@@ -1,4 +1,4 @@
-package com.example.matelas.model.restesstockdto;
+package com.example.matelas.dto.restesstockdto;
 
 import com.example.matelas.model.achat.AchatMatierePremiere;
 

@@ -1,7 +1,8 @@
-package com.example.matelas.model.restesstockdto;
+package com.example.matelas.dto.restesstockdto;
 
 
 import com.example.matelas.model.achat.AchatMatierePremiere;
+import com.example.matelas.model.achat.AchatMatierePremiereRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +13,15 @@ import java.util.List;
 @Service
 public class RestesStockService {
 
-    private final RestesStockRepository restesStockRepository;
+    private final AchatMatierePremiereRepository achatMatierePremiereRepository;
 
     @Autowired
-    public RestesStockService(RestesStockRepository restesStockRepository) {
-        this.restesStockRepository = restesStockRepository;
+    public RestesStockService( AchatMatierePremiereRepository achatMatierePremiereRepository) {
+        this.achatMatierePremiereRepository = achatMatierePremiereRepository;
     }
 
     public List<RestesStockDTO> getRestesStockByDate(Date date , int matierePremiereId) {
-        List<Object[]> results = restesStockRepository.getRestesStockWithAchatMatierePremiere(date , matierePremiereId);
+        List<Object[]> results = achatMatierePremiereRepository.getRestesStockWithAchatMatierePremiere(date , matierePremiereId);
         List<RestesStockDTO> restesStockDTOList = new ArrayList<>();
 
         for (Object[] result : results) {
