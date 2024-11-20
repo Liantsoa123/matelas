@@ -19,8 +19,8 @@ public class RestesStockService {
         this.restesStockRepository = restesStockRepository;
     }
 
-    public List<RestesStockDTO> getRestesStockByDate(Date date) {
-        List<Object[]> results = restesStockRepository.getRestesStockWithAchatMatierePremiere(date);
+    public List<RestesStockDTO> getRestesStockByDate(Date date , int matierePremiereId) {
+        List<Object[]> results = restesStockRepository.getRestesStockWithAchatMatierePremiere(date , matierePremiereId);
         List<RestesStockDTO> restesStockDTOList = new ArrayList<>();
 
         for (Object[] result : results) {

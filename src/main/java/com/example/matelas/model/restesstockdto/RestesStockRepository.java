@@ -2,6 +2,7 @@ package com.example.matelas.model.restesstockdto;
 
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +18,10 @@ public interface RestesStockRepository {
             "FROM achat_matiere_premiere amp " +
             "LEFT JOIN sorti_matiere_premiere sm ON amp.id = sm.id_achat " +
             "WHERE (amp.quantite - COALESCE(sm.quantite, 0)) > 0 " +
-            "AND amp.date_achat <= :date", nativeQuery = true)
-    List<Object[]> getRestesStockWithAchatMatierePremiere(java.sql.Date date);
+            "AND amp.date_achat <= :date " +
+            "AND amp.matiere_premier_id = :matierePremiereId", nativeQuery = true)
+    List<Object[]> getRestesStockWithAchatMatierePremiere(
+            @Param("date") java.sql.Date date,
+            @Param("matierePremiereId") int matierePremiereId);
+
 }
