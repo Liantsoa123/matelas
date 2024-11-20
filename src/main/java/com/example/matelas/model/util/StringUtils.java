@@ -7,7 +7,7 @@ public class StringUtils {
     public static java.sql.Date convertStringToDate(String dateString) throws ParseException {
         // Define the possible date formats
         String[] dateFormats = {
-                "yyyy-dd-yy", // First format: yyyy-dd-yy
+                "yyyy-MM-dd", // Corrected format: yyyy-dd-MM (months are MM, not mm)
                 "MM/dd/yyyy"  // Second format: MM/dd/yyyy
         };
 
@@ -15,11 +15,11 @@ public class StringUtils {
         for (String format : dateFormats) {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+                dateFormat.setLenient(false); // Enforce strict parsing
                 java.util.Date utilDate = dateFormat.parse(dateString);
                 return new java.sql.Date(utilDate.getTime());
-            } catch (Exception e) {
-                // Continue to the next format if parsing fails
-                e.printStackTrace();
+            } catch (ParseException e) {
+                // Suppress error and continue to the next format
             }
         }
 
