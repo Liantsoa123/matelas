@@ -10,17 +10,10 @@ public class MatierePremier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String reference;
+    private int id;
     private String nom;
     private String unite ;
 
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
 
     public String getNom() {
         return nom;
@@ -38,11 +31,19 @@ public class MatierePremier {
         this.unite = unite;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
     public MatierePremier() {
     }
 
-    public MatierePremier(String reference, String nom, String unite) {
-        this.reference = reference;
+    public MatierePremier( String nom, String unite) {
         this.nom = nom;
         this.unite = unite;
     }

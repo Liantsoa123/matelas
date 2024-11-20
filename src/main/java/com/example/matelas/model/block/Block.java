@@ -120,4 +120,5 @@ public class Block {
     public void setMachine(Machine machine) {
         this.machine = machine;
     }
+
 }
