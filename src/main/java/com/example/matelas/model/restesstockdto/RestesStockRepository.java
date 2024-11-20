@@ -19,9 +19,11 @@ public interface RestesStockRepository {
             "LEFT JOIN sorti_matiere_premiere sm ON amp.id = sm.id_achat " +
             "WHERE (amp.quantite - COALESCE(sm.quantite, 0)) > 0 " +
             "AND amp.date_achat <= :date " +
-            "AND amp.matiere_premier_id = :matierePremiereId", nativeQuery = true)
+            "AND amp.matiere_premier_id = :matierePremiereId " +
+            "ORDER BY amp.date_achat ASC", nativeQuery = true)
     List<Object[]> getRestesStockWithAchatMatierePremiere(
             @Param("date") java.sql.Date date,
             @Param("matierePremiereId") int matierePremiereId);
+
 
 }
