@@ -20,10 +20,9 @@ public interface AchatMatierePremiereRepository extends JpaRepository<AchatMatie
             "        LEFT JOIN\n" +
             "    sortie_matiere_premiere sm\n" +
             "    ON amp.id = sm.achat_matiere_premiere_id\n" +
-            "        AND sm.date_sortie <= ?\n" +
             "WHERE\n" +
-            "    amp.date_achat <= ?\n" +
-            "  AND amp.matiere_premier_id = ?\n" +
+            "    amp.date_achat <= :date\n" +
+            "  AND amp.matiere_premier_id = :matierePremiereId\n" +
             "GROUP BY\n" +
             "    amp.date_achat, amp.quantite, amp.id\n" +
             "HAVING\n" +

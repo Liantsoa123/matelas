@@ -120,14 +120,8 @@ public class BlockService {
         for ( FormuleDetails formuleDetails1 : formuleDetails ){
             double quantiteIlaina = formuleDetails1.getQuantite() * volume ;
             List<RestesStockDTO> restesStockDTO = restesStockService.getRestesStockByDate(date, formuleDetails1.getMatierePremier().getId());
-            System.out.println("Restes Stock : " + restesStockDTO.size());
-//            System.out.println("Date": + date.toString());
-            System.out.println("Quantite Ilaina : " + quantiteIlaina);
-            System.out.println("Volume : " + volume);
+
             for ( RestesStockDTO restesStockDTO1 : restesStockDTO ){
-                System.out.println("HUhuhuuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhhuhuhuhuhhuu");
-                System.out.println("Nom Matiere : " +  restesStockDTO1.getAchatMatierePremiere().getMatierePremier().getNom());
-                System.out.println("Quantite Reste : " + restesStockDTO1.getQuantiteReste());
                 double quantitReste = restesStockDTO1.getQuantiteReste();
                 if( quantitReste < quantiteIlaina ){
                     if ( restesStockDTO.indexOf(restesStockDTO1) == restesStockDTO.size() - 1 ){

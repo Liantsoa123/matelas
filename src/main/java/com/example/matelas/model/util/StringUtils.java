@@ -8,7 +8,7 @@ public class StringUtils {
         // Define the possible date formats
         String[] dateFormats = {
                 "yyyy-MM-dd", // Corrected format: yyyy-dd-MM (months are MM, not mm)
-                "MM/dd/yyyy"  // Second format: MM/dd/yyyy
+                "dd/MM/yyyy"  // Second format: MM/dd/yyyy
         };
 
         // Try each date format
