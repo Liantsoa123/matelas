@@ -87,5 +87,33 @@ public class CsvService {
     }
 
 
+    public String cvsToQueryAchat(InputStream inputStream) {
+        StringBuilder query = new StringBuilder("INSERT INTO achat_matiere_premiere (date_achat, matiere_premier_id, prix_revient, quantite) VALUES ");
+
+        try (CSVParser csvParser = new CSVParser(new InputStreamReader(inputStream), CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+
+            for (CSVRecord record : csvParser) {
+                query.append("(")
+                        .append("'").append(record.get("date_achat")).append("', ") // Ensure proper quoting for string values
+                        .append(record.get("matiere_premier_id")).append(", ")
+                        .append(record.get("prix_revient")).append(", ")
+                        .append(record.get("quantite"))
+                        .append("), ");
+            }
+
+            // Remove trailing comma and space
+            if (query.length() > 0) {
+                query.setLength(query.length() - 2);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error processing the CSV file: " + e.getMessage());
+            throw new RuntimeException("Error processing the CSV file: " + e.getMessage());
+        }
+
+        return query.toString();
+    }
+
+
 
 }

@@ -176,5 +176,17 @@ public class BlockService {
         )).collect(Collectors.toList());
     }
 
+    public List<BlockGroupDTO> getAllBlocksGroupedByMachine(int year) {
+        List<Object[]> results = blockRepository.findAllBlocksGroupedByMachineNative(year);
+        return results.stream().map(row -> new BlockGroupDTO(
+                (int) ((Number) row[0]).longValue(),
+                (String) row[1],
+                ((Number) row[2]).longValue(),
+                ((Number) row[3]).doubleValue(),
+                ((Number) row[4]).doubleValue(),
+                ((Number) row[5]).doubleValue()
+        )).collect(Collectors.toList());
+    }
+
 
 }

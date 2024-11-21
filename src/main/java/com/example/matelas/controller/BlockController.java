@@ -17,6 +17,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,6 +106,19 @@ public class BlockController {
     public String getBlocksGroupedByMachine( Model model ) {
         List<BlockGroupDTO> blockGroupDTO = blockService.getAllBlocksGroupedByMachine();
         model.addAttribute("blockGroupDTO" , blockGroupDTO);
+        return "blockmachinelist";
+    }
+
+    @PostMapping("/groupebymachienDate")
+    public  String getBlocksGroupedByMachineWithDate ( @RequestParam("year") int year , Model model ){
+        List<BlockGroupDTO> blockGroupDTOS = new ArrayList<>();
+
+        if ( year == 0 ){
+            blockGroupDTOS = blockService.getAllBlocksGroupedByMachine();
+        }else {
+            blockGroupDTOS = blockService.getAllBlocksGroupedByMachine(year);
+        }
+        model.addAttribute("blockGroupDTO" , blockGroupDTOS);
         return "blockmachinelist";
     }
 

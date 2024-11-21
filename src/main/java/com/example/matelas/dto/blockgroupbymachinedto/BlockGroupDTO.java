@@ -20,9 +20,6 @@ public class BlockGroupDTO {
         this.difference = difference;
     }
 
-
-
-
     public String getMachineName() {
         return machineName;
     }
