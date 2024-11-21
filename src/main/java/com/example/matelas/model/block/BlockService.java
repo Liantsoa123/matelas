@@ -1,5 +1,6 @@
 package com.example.matelas.model.block;
 
+import com.example.matelas.dto.blockgroupbymachinedto.BlockGroupDTO;
 import com.example.matelas.dto.restesstockdto.RestesStockDTO;
 import com.example.matelas.model.csv.CsvService;
 import com.example.matelas.dto.restesstockdto.RestesStockService;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BlockService {
@@ -157,5 +159,22 @@ public class BlockService {
         entityManager.createNativeQuery(query).executeUpdate();
         System.out.println("Insertion finished");
     }
+
+    /*public List<BlockGroupDTO> getAllBlocksGroupedByMachine() {
+        return blockRepository.findAllBlocksGroupedByMachine();
+    }*/
+
+    public List<BlockGroupDTO> getAllBlocksGroupedByMachine() {
+        List<Object[]> results = blockRepository.findAllBlocksGroupedByMachineNative();
+        return results.stream().map(row -> new BlockGroupDTO(
+                (int) ((Number) row[0]).longValue(),
+                (String) row[1],
+                ((Number) row[2]).longValue(),
+                ((Number) row[3]).doubleValue(),
+                ((Number) row[4]).doubleValue(),
+                ((Number) row[5]).doubleValue()
+        )).collect(Collectors.toList());
+    }
+
 
 }

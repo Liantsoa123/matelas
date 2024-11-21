@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Blocks</title>
+    <link rel="stylesheet" th:href="@{/css/blocklist.css}" />
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}" />
+
+</head>
+<body>
+<!-- Sidebar inclusion -->
+<div th:replace="sidebar :: sidebar"></div>
+
+
+<h1>All Blocks</h1>
+
+<!-- Table to display all blocks -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Machien</th>
+        <th>Quantite</th>
+        <th>PrixRevient</th>
+        <th>PrixTheorique</th>
+        <th>Difference</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="blockDTO : ${blockGroupDTO}">
+        <td th:text="${blockDTO.id}"></td>
+        <td th:text="${blockDTO.getMachineName()}"></td>
+        <td th:text="${blockDTO.getQuantite()}"></td>
+        <td th:text="${blockDTO.getTotalPrixRevient()}"></td>
+        <td th:text="${blockDTO.getTotalPrixTheorique()}"></td>
+        <td th:text="${blockDTO.getDifference()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+l>

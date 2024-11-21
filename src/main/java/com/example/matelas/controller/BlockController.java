@@ -1,5 +1,6 @@
 package com.example.matelas.controller;
 
+import com.example.matelas.dto.blockgroupbymachinedto.BlockGroupDTO;
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.csv.CsvService;
@@ -99,5 +100,14 @@ public class BlockController {
 
         return "redirect:/block"; // Return to the upload page
     }
+
+    @GetMapping("/groupedbymachine")
+    public String getBlocksGroupedByMachine( Model model ) {
+        List<BlockGroupDTO> blockGroupDTO = blockService.getAllBlocksGroupedByMachine();
+        model.addAttribute("blockGroupDTO" , blockGroupDTO);
+        return "blockmachinelist";
+    }
+
+
 
 }
