@@ -41,6 +41,7 @@
         <th>ID</th>
         <th>Machine</th>
         <th>Quantite</th>
+        <th>Volume</th>
         <th>PrixRevient</th>
         <th>PrixTheorique</th>
         <th>Difference</th>
@@ -52,6 +53,7 @@
         <td th:text="${blockDTO.id}"></td>
         <td th:text="${blockDTO.getMachineName()}"></td>
         <td th:text="${blockDTO.getQuantite()}"></td>
+        <td th:text="${blockDTO.getVolume()}"></td>
         <td th:text="${blockDTO.getTotalPrixRevient()}"></td>
         <td th:text="${blockDTO.getTotalPrixTheorique()}"></td>
         <td th:text="${blockDTO.getDifference()}"></td>

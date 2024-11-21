@@ -172,7 +172,8 @@ public class BlockService {
                 ((Number) row[2]).longValue(),
                 ((Number) row[3]).doubleValue(),
                 ((Number) row[4]).doubleValue(),
-                ((Number) row[5]).doubleValue()
+                ((Number) row[5]).doubleValue(),
+                ((Number) row[6]).doubleValue()
         )).collect(Collectors.toList());
     }
 
@@ -184,7 +185,8 @@ public class BlockService {
                 ((Number) row[2]).longValue(),
                 ((Number) row[3]).doubleValue(),
                 ((Number) row[4]).doubleValue(),
-                ((Number) row[5]).doubleValue()
+                ((Number) row[5]).doubleValue(),
+                ((Number) row[6]).doubleValue()
         )).collect(Collectors.toList());
     }
 

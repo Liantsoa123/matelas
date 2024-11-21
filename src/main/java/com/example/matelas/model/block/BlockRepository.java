@@ -37,6 +37,7 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
             "    COUNT(block.id) AS quantite,\n" +
             "    SUM(block.prix_revient) AS totalPrixRevient,\n" +
             "    SUM(block.prix_theorique) AS totalPrixTheorique,\n" +
+            "    SUM(block.longueur * block.largeur * block.epaisseur) AS totalVolume,\n" +
             "    ABS ((SUM(block.prix_revient) - SUM(block.prix_theorique))) AS difference\n" +
             "FROM\n" +
             "    block\n" +
@@ -55,6 +56,7 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
             "    COUNT(block.id) AS quantite,\n" +
             "    SUM(block.prix_revient) AS totalPrixRevient,\n" +
             "    SUM(block.prix_theorique) AS totalPrixTheorique,\n" +
+            "    SUM(block.longueur * block.largeur * block.epaisseur) AS totalVolume,\n" +
             "    ABS(SUM(block.prix_revient) - SUM(block.prix_theorique)) AS difference\n" +
             "FROM\n" +
             "    block\n" +

@@ -3,21 +3,23 @@ package com.example.matelas.dto.blockgroupbymachinedto;
 public class BlockGroupDTO {
 
 
-    int id;
+     int id;
      String machineName;
      long quantite;
      double totalPrixRevient;
      double totalPrixTheorique;
      double difference;
+    double volume ;
 
     public BlockGroupDTO(int id, String machineName, long quantite,
-                         double totalPrixRevient, double totalPrixTheorique, double difference) {
+                         double totalPrixRevient, double totalPrixTheorique, double volume , double difference) {
         this.id = id;
         this.machineName = machineName;
         this.quantite = quantite;
         this.totalPrixRevient = totalPrixRevient;
         this.totalPrixTheorique = totalPrixTheorique;
         this.difference = difference;
+        this.volume = volume;
     }
 
     public String getMachineName() {
@@ -66,6 +68,14 @@ public class BlockGroupDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 
 }
