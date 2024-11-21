@@ -3,6 +3,8 @@ package com.example.matelas.controller;
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.csv.CsvService;
+import com.example.matelas.model.formuleDetails.FormuleDetails;
+import com.example.matelas.model.formuleDetails.FormuleDetailsService;
 import com.example.matelas.model.transformation.TransformationService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -23,11 +25,13 @@ public class BlockController {
     private  final TransformationService transformationService ;
     private static final String UPLOADED_FOLDER = "uploads/";
     private final CsvService csvService;
+    private final FormuleDetailsService formuleDetailsService;
 
-    public BlockController(BlockService blockService, TransformationService transformationService, CsvService csvService) {
+    public BlockController(BlockService blockService, TransformationService transformationService, CsvService csvService, FormuleDetailsService formuleDetailsService) {
         this.blockService = blockService;
         this.transformationService = transformationService;
         this.csvService = csvService;
+        this.formuleDetailsService = formuleDetailsService;
     }
 
     // Handle the form submission
@@ -79,7 +83,7 @@ public class BlockController {
 
         try {
             // Process the file content without saving it
-            String query = csvService.cvsToQueryBlock(file.getInputStream());
+            String query = csvService.cvsToQueryBlock(file.getInputStream() , formuleDetailsService.getAllFormuleDetails());
             System.out.println("Generated Query: " + query);
             blockService.importCsv(query);
 
@@ -87,6 +91,10 @@ public class BlockController {
 
         } catch (Exception e) {
            System.out.println( "File processing failed: " + e.getMessage());
+            model.addAttribute("message", "Insertion Block");
+            model.addAttribute("block" , new Block());
+            model.addAttribute("error","File processing failed: " + e.getMessage() );
+            return "block";
         }
 
         return "redirect:/block"; // Return to the upload page

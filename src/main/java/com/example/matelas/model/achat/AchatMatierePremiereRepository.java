@@ -10,17 +10,21 @@ import java.util.List;
 
 @Repository
 public interface AchatMatierePremiereRepository extends JpaRepository<AchatMatierePremiere, Integer> {
-    @Query(value = "SELECT " +
-            "amp.id AS id, " +
-            "amp.id_achat AS achat_matiere_premiere, " +
-            "(amp.quantite - COALESCE(sm.quantite, 0)) AS quantite_reste, " +
-            "amp.date_achat AS date_achat_matiere_premiere " +
-            "FROM achat_matiere_premiere amp " +
-            "LEFT JOIN sorti_matiere_premiere sm ON amp.id = sm.id_achat " +
-            "WHERE (amp.quantite - COALESCE(sm.quantite, 0)) > 0 " +
-            "AND amp.date_achat <= :date " +
-            "AND amp.matiere_premier_id = :matierePremiereId " +
-            "ORDER BY amp.date_achat ASC", nativeQuery = true)
+    @Query(value = "SELECT\n" +
+            "    amp.id,\n" +
+            "    amp.id AS achat_matiere_premiere,\n" +
+            "    (amp.quantite - COALESCE(SUM(sm.quantite), 0)) AS quantite_reste,\n" +
+            "    amp.date_achat AS date_achat_matiere_premiere\n" +
+            "FROM\n" +
+            "    achat_matiere_premiere amp\n" +
+            "        LEFT JOIN\n" +
+            "    sortie_matiere_premiere sm ON amp.id = sm.achat_matiere_premiere_id\n" +
+            "WHERE amp.date_achat <= :date\n" +
+            "  AND amp.matiere_premier_id = :matierePremiereId\n" +
+            "group by amp.date_achat, amp.quantite, amp.id\n" +
+            "HAVING  (amp.quantite - COALESCE( SUM(sm.quantite), 0)) > 0\n" +
+            "ORDER BY\n" +
+            "    amp.date_achat ASC;" , nativeQuery = true)
     List<Object[]> getRestesStockWithAchatMatierePremiere(
             @Param("date") java.sql.Date date,
             @Param("matierePremiereId") int matierePremiereId);

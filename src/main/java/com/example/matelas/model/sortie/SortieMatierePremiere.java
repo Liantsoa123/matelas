@@ -12,7 +12,7 @@ public class SortieMatierePremiere {
     private int id;
     private Date dateSortie;
     private double quantite;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "achat_matiere_premiere_id")
     private AchatMatierePremiere achatMatierePremiere;
 
