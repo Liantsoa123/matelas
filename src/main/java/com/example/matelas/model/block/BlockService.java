@@ -2,6 +2,8 @@ package com.example.matelas.model.block;
 
 import com.example.matelas.dto.blockgroupbymachinedto.BlockGroupDTO;
 import com.example.matelas.dto.restesstockdto.RestesStockDTO;
+import com.example.matelas.model.achat.AchatMatierePremiere;
+import com.example.matelas.model.achat.AchatMatierePremiereService;
 import com.example.matelas.model.csv.CsvService;
 import com.example.matelas.dto.restesstockdto.RestesStockService;
 import com.example.matelas.model.formuleDetails.FormuleDetails;
@@ -29,18 +31,20 @@ public class BlockService {
     private final TransformationService transformationService;
     private final RestesStockService restesStockService;
 
-    private final EntityManager entityManager ;
+    private final EntityManager entityManager;
     private final MatierePremierService matierePremierService;
     private final SortieMatierePremiereService sortieMatierePremiereService;
+    private final AchatMatierePremiereService achatMatierePremiereService;
 
     @Autowired
-    public BlockService(BlockRepository blockRepository, @Lazy TransformationService transformationService,  EntityManager entityManager, RestesStockService restesStockService, MatierePremierService matierePremierService, SortieMatierePremiereService sortieMatierePremiereService) {
+    public BlockService(BlockRepository blockRepository, @Lazy TransformationService transformationService, EntityManager entityManager, RestesStockService restesStockService, MatierePremierService matierePremierService, SortieMatierePremiereService sortieMatierePremiereService, AchatMatierePremiereService achatMatierePremiereService) {
         this.blockRepository = blockRepository;
         this.transformationService = transformationService;
         this.entityManager = entityManager;
         this.restesStockService = restesStockService;
         this.matierePremierService = matierePremierService;
         this.sortieMatierePremiereService = sortieMatierePremiereService;
+        this.achatMatierePremiereService = achatMatierePremiereService;
     }
 
     // Get all blocks
@@ -68,9 +72,9 @@ public class BlockService {
         return blockRepository.save(block);
     }
 
-    public Block saveBlockAutoName(Block block){
-        block.setName("block"+blockRepository.getNextSequence());
-        return  blockRepository.save(block);
+    public Block saveBlockAutoName(Block block) {
+        block.setName("block" + blockRepository.getNextSequence());
+        return blockRepository.save(block);
     }
 
     // Update an existing block
@@ -100,41 +104,41 @@ public class BlockService {
         return blockRepository.findBlocksByMereId(mereId);
     }
 
-    public  Block getBLockSrc( int idBLock ){
+    public Block getBLockSrc(int idBLock) {
         Transformation t = transformationService.findTransformationbyIDReste(idBLock);
-        if ( t == null ){
-            System.out.println("Block src found "+idBLock);
+        if (t == null) {
+            System.out.println("Block src found " + idBLock);
             return getBlockById(idBLock).get();
         }
         Block mere = null;
-        while ( t!=null ){
+        while (t != null) {
             mere = t.getMere();
             t = transformationService.findTransformationbyIDReste(mere.getId());
         }
-        return  mere ;
+        return mere;
     }
 
 
-    public double getprixRevientTheorique (Date date , double volume , List<FormuleDetails> formuleDetails ){
-        double prixRevient = 0 ;
-        for ( FormuleDetails formuleDetails1 : formuleDetails ){
-            double quantiteIlaina = formuleDetails1.getQuantite() * volume ;
-            List<RestesStockDTO> restesStockDTO = restesStockService.getRestesStockByDate(date, formuleDetails1.getMatierePremier().getId());
-
-            for ( RestesStockDTO restesStockDTO1 : restesStockDTO ){
-                double quantitReste = restesStockDTO1.getQuantiteReste();
-                if( quantitReste < quantiteIlaina ){
-                    if ( restesStockDTO.indexOf(restesStockDTO1) == restesStockDTO.size() - 1 ){
-                        throw new RuntimeException("Pas de stock suffisant pour la matiere premiere "+restesStockDTO1.getAchatMatierePremiere().getMatierePremier().getNom());
+    public double getprixRevientTheorique(Date date, double volume, List<FormuleDetails> formuleDetails, List<AchatMatierePremiere> achatMatierePremiereList) {
+        double prixRevient = 0;
+        System.out.println("volume=" + volume);
+        for (FormuleDetails formuleDetails1 : formuleDetails) {
+            double quantiteIlaina = formuleDetails1.getQuantite() * volume;
+            System.out.println("volume ilaina = " + quantiteIlaina);
+            for (AchatMatierePremiere achatMatierePremiere : achatMatierePremiereList) {
+                double ilainaachat = 0;
+                if (achatMatierePremiere.getMatierePremier().getId() == formuleDetails1.getMatierePremier().getId() && !achatMatierePremiere.getDateAchat().after(date)) {
+                    if (achatMatierePremiere.getQuantite() > 0) {
+                        ilainaachat = Math.min(achatMatierePremiere.getQuantite(), quantiteIlaina);
+                        quantiteIlaina -= ilainaachat;
+                        achatMatierePremiere.setQuantite(achatMatierePremiere.getQuantite() - ilainaachat);
+                        prixRevient += ilainaachat * achatMatierePremiere.getPrixRevient();
                     }
-                    quantiteIlaina -= quantitReste ;
-                    prixRevient += quantitReste * restesStockDTO1.getAchatMatierePremiere().getPrixRevient();
-                    sortieMatierePremiereService.addSortie(new SortieMatierePremiere( date , quantitReste , restesStockDTO1.getAchatMatierePremiere()));
-                }else {
-                    prixRevient += quantiteIlaina * restesStockDTO1.getAchatMatierePremiere().getPrixRevient();
-                    sortieMatierePremiereService.addSortie(new SortieMatierePremiere( date , quantiteIlaina , restesStockDTO1.getAchatMatierePremiere()));
-                    break;
                 }
+
+            }
+            if (quantiteIlaina > 0) {
+                throw new RuntimeException("Pas de stock suffisant pour la matiere premiere " + formuleDetails1.getMatierePremier().getNom());
             }
         }
         return prixRevient;
@@ -149,7 +153,7 @@ public class BlockService {
     }*/
 
     @Transactional
-    public void importCsv (String query){
+    public void importCsv(String query) {
         entityManager.createNativeQuery(query).executeUpdate();
         System.out.println("Insertion finished");
     }

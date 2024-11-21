@@ -1,5 +1,7 @@
 package com.example.matelas.model.csv;
 
+import com.example.matelas.model.achat.AchatMatierePremiere;
+import com.example.matelas.model.achat.AchatMatierePremiereService;
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.formuleDetails.FormuleDetails;
@@ -23,9 +25,11 @@ import org.apache.commons.csv.CSVRecord;
 public class CsvService {
 
     private final BlockService blockService;
+    private final AchatMatierePremiereService achatMatierePremiereService;
 
-    public CsvService(BlockService blockService) {
+    public CsvService(BlockService blockService, AchatMatierePremiereService achatMatierePremiereService) {
         this.blockService = blockService;
+        this.achatMatierePremiereService = achatMatierePremiereService;
     }
    /* public String cvsToQueryBlock(String filePath) {
         StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name , machine_id) VALUES ");
@@ -94,8 +98,9 @@ public class CsvService {
 
 
     public String cvsToQueryBlock(InputStream inputStream, List<FormuleDetails> formuleDetails) {
+        System.out.println("achatMatierePremiereList = " );
+        List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
         StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id, prix_theorique) VALUES ");
-
         try (CSVParser csvParser = new CSVParser(new InputStreamReader(inputStream), CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
             int id = 1 ;
             for (CSVRecord record : csvParser) {
@@ -110,7 +115,7 @@ public class CsvService {
                     Double prix_revient = Double.valueOf(record.get("prix_revient"));
 
                     Date creation_block = StringUtils.convertStringToDate(record.get("creation_block"));  // Assuming you have a utility method to convert string to date
-
+                    System.out.println("creation_block"+ creation_block.toString());
                     String name = "Block"+id; // Corrected here to get the actual name
 
                     int machine_id = Integer.parseInt(record.get("machine_id"));
@@ -119,7 +124,7 @@ public class CsvService {
                     // Calculate volume and prix_theoriqu
                    double volume = longueur * largeur * epaisseur;
 
-                   double prixTheorique = blockService.getprixRevientTheorique(creation_block, volume, formuleDetails);
+                   double prixTheorique = blockService.getprixRevientTheorique(creation_block, volume, formuleDetails , achatMatierePremiereList);
 
 
                     // Append the values to the query
@@ -152,10 +157,9 @@ public class CsvService {
             System.err.println("Error processing the CSV file: " + e.getMessage());
             throw new RuntimeException("Error processing the CSV file: " + e.getMessage(), e);
         }
-
+//        achatMatierePremiereService.saveAllAchatMatierePremieres(achatMatierePremiereList);
         return query.toString();
     }
-
 
 
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +47,33 @@ public class AchatMatierePremiereService {
         entityManager.createNativeQuery(query).executeUpdate();
         System.out.println("Insertion finished");
     }
+
+    public AchatMatierePremiere getByIdMatiereAndDate(int idmatiere, Date date, List<AchatMatierePremiere> achatMatierePremiereList) {
+        for (AchatMatierePremiere achatMatierePremiere : achatMatierePremiereList) {
+            // Check if matierePremier and dateAchat are not null
+            if (achatMatierePremiere.getMatierePremier() != null &&
+                    achatMatierePremiere.getMatierePremier().getId() == idmatiere &&
+                    achatMatierePremiere.getDateAchat() != null &&
+                    achatMatierePremiere.getDateAchat().compareTo(date) <= 0 && // Use compareTo for Date comparison
+                    achatMatierePremiere.getQuantite() > 0) {
+                return achatMatierePremiere;
+            }
+        }
+        return null;
+    }
+
+    public  List<AchatMatierePremiere> getAllAchatMatierePremieresAsc(){
+        return achatMatierePremiereRepository.getAllAchatMatierePremieres();
+    }
+
+
+    public List<AchatMatierePremiere> saveAllAchatMatierePremieres(List<AchatMatierePremiere> achatMatierePremiereList) {
+        if (achatMatierePremiereList == null || achatMatierePremiereList.isEmpty()) {
+            throw new IllegalArgumentException("The list of AchatMatierePremiere to save cannot be null or empty.");
+        }
+
+        return achatMatierePremiereRepository.saveAll(achatMatierePremiereList);
+    }
+
 
 }

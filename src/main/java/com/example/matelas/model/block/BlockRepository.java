@@ -46,7 +46,7 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
             "GROUP BY\n" +
             "    machine.id, machine.name\n" +
             "ORDER BY\n" +
-            "    ABS(SUM(block.prix_revient) - SUM(block.prix_theorique));", nativeQuery = true)
+            "    ABS(SUM(block.prix_revient) - SUM(block.prix_theorique)) ASC ;", nativeQuery = true)
     List<Object[]> findAllBlocksGroupedByMachineNative();
 
 
@@ -67,7 +67,7 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
             "GROUP BY\n" +
             "    machine.id, machine.name\n" +
             "ORDER BY\n" +
-            "    ABS(SUM(block.prix_revient) - SUM(block.prix_theorique));" , nativeQuery = true)
+            "    ABS(SUM(block.prix_revient) - SUM(block.prix_theorique)) ASC;" , nativeQuery = true)
     List<Object[]> findAllBlocksGroupedByMachineNative( @Param("year") int year );
 
 }

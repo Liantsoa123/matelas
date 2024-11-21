@@ -78,6 +78,7 @@ public class BlockController {
 
     @PostMapping("/importCsv")
     public String handleFileUpload(@RequestParam("filecsv") MultipartFile file, Model model) {
+        System.out.println("uploading file");
         if (file.isEmpty()) {
             model.addAttribute("message", "No file selected for upload.");
             return "upload";
@@ -85,6 +86,7 @@ public class BlockController {
 
         try {
             // Process the file content without saving it
+            System.out.println("Processing file: " + file.getOriginalFilename());
             String query = csvService.cvsToQueryBlock(file.getInputStream() , formuleDetailsService.getAllFormuleDetails());
             System.out.println("Generated Query: " + query);
             blockService.importCsv(query);
@@ -98,7 +100,6 @@ public class BlockController {
             model.addAttribute("error","File processing failed: " + e.getMessage() );
             return "block";
         }
-
         return "redirect:/block"; // Return to the upload page
     }
 

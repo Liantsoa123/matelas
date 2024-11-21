@@ -22,7 +22,6 @@ public class StringUtils {
                 // Suppress error and continue to the next format
             }
         }
-
         // If no format worked, throw an exception
         throw new ParseException("Invalid date format: " + dateString, 0);
     }

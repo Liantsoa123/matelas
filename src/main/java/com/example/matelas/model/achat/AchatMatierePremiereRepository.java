@@ -32,4 +32,8 @@ public interface AchatMatierePremiereRepository extends JpaRepository<AchatMatie
     List<Object[]> getRestesStockWithAchatMatierePremiere(
             @Param("date") java.sql.Date date,
             @Param("matierePremiereId") int matierePremiereId);
+
+    @Query(value = "select  ac from achat_matiere_premiere ac order by ac.date_achat asc", nativeQuery = true)
+    List<AchatMatierePremiere> getAllAchatMatierePremieres();
+
 }
