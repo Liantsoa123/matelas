@@ -84,6 +84,9 @@ public class BlockController {
             return "upload";
         }
 
+        model.addAttribute("message", "Insertion Block");
+        model.addAttribute("block" , new Block());
+
         try {
             // Process the file content without saving it
             System.out.println("Processing file: " + file.getOriginalFilename());
@@ -92,29 +95,22 @@ public class BlockController {
             blockService.importCsv(query);
 
             System.out.println("File processed successfully!");
-
+            model.addAttribute("messageI" , "File processed successfully!");
         } catch (Exception e) {
            System.out.println( "File processing failed: " + e.getMessage());
-            model.addAttribute("message", "Insertion Block");
-            model.addAttribute("block" , new Block());
             model.addAttribute("error","File processing failed: " + e.getMessage() );
-            return "block";
+
         }
-        return "redirect:/block"; // Return to the upload page
+        return "block";
+
     }
 
-    @GetMapping("/groupedbymachine")
-    public String getBlocksGroupedByMachine( Model model ) {
-        List<BlockGroupDTO> blockGroupDTO = blockService.getAllBlocksGroupedByMachine();
-        model.addAttribute("blockGroupDTO" , blockGroupDTO);
-        return "blockmachinelist";
-    }
 
-    @PostMapping("/groupebymachienDate")
-    public  String getBlocksGroupedByMachineWithDate ( @RequestParam("year") int year , Model model ){
+    @GetMapping("/groupebymachienDate")
+    public  String getBlocksGroupedByMachineWithDate ( @RequestParam( value = "year" , defaultValue = "0"  ) int year   , Model model ){
         List<BlockGroupDTO> blockGroupDTOS = new ArrayList<>();
 
-        if ( year == 0 ){
+        if ( year == 0   ){
             blockGroupDTOS = blockService.getAllBlocksGroupedByMachine();
             model.addAttribute("annee" , "Tous");
         }else {
@@ -128,7 +124,7 @@ public class BlockController {
     @PostMapping("/generateBlockCSV")
     public String generateBlockCSV(@RequestParam("numBlock") int numBlock, Model model) {
         double prixVolumique = blockService.prixRevientVolumique(4); // Example usage
-        String filePath = "C:\\Users\\rakot\\OneDrive\\Documents\\S5\\Architecture Logiciel\\matelas\\GeneratedCSV\\blocks.csv";
+        String filePath = "C:\\Users\\rakot\\OneDrive\\Documents\\S5\\Architecture Logiciel\\matelas\\Data\\GeneratedCSV\\blocks.csv";
 
         try {
             csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);

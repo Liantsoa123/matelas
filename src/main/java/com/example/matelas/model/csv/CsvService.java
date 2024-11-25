@@ -30,13 +30,20 @@ public class CsvService {
     private final BlockService blockService;
     private final AchatMatierePremiereService achatMatierePremiereService;
 
+    final LocalDate startDate = LocalDate.of(2022, 1, 1);
+    final LocalDate endDate = LocalDate.of(2024, 12, 31);
+    // Constantes pour les bornes
+    final double MIN_LONGUEUR = 20.0, MAX_LONGUEUR = 25.0;
+    final double MIN_LARGEUR = 5.0, MAX_LARGEUR = 7.0;
+    final double MIN_EPAISSEUR = 10.0, MAX_EPAISSEUR = 15.0;
+    final double MIN_VARIATION = 0.9, MAX_VARIATION = 1.1;
+
     public CsvService(BlockService blockService, AchatMatierePremiereService achatMatierePremiereService) {
         this.blockService = blockService;
         this.achatMatierePremiereService = achatMatierePremiereService;
     }
 
     public String cvsToQueryBlock(InputStream inputStream, List<FormuleDetails> formuleDetails) {
-        System.out.println("achatMatierePremiereList = " );
         List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
         StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id, prix_theorique) VALUES ");
         try (CSVParser csvParser = new CSVParser(new InputStreamReader(inputStream), CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
@@ -103,13 +110,6 @@ public class CsvService {
 
 
     //GENERATE CSV RANDOM FOR BLOCK
-    final LocalDate startDate = LocalDate.of(2022, 1, 1);
-    final LocalDate endDate = LocalDate.of(2024, 12, 31);
-    // Constantes pour les bornes
-    final double MIN_LONGUEUR = 20.0, MAX_LONGUEUR = 25.0;
-    final double MIN_LARGEUR = 5.0, MAX_LARGEUR = 7.0;
-    final double MIN_EPAISSEUR = 10.0, MAX_EPAISSEUR = 15.0;
-    final double MIN_VARIATION = 0.9, MAX_VARIATION = 1.1;
     public void genererBlockCSV(int numBlocks, double prixVolumique, long minMachineId, long maxMachineId, String filePath) throws Exception {
         if (numBlocks <= 0 || minMachineId > maxMachineId) {
             throw new IllegalArgumentException("Invalid input parameters.");
@@ -171,6 +171,21 @@ public class CsvService {
             System.err.println("Error generating CSV file: " + e.getMessage());
             throw new Exception("Error generating CSV file: " + e.getMessage());
         }
+    }
+
+
+    public String generataBlockQueryWithReste(int numblock , double prixVolumique , long minMachineId, long maxMachineId, String filePath) throws Exception {
+        List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
+        StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id, prix_theorique) VALUES ");
+        try {
+
+
+        } catch (Exception e) {
+            // Log any errors that happen outside the loop (like CSV parsing issues)
+            System.err.println("Error processing the CSV file: " + e.getMessage());
+            throw new RuntimeException("Error processing the CSV file: " + e.getMessage(), e);
+        }
+        return query.toString();
     }
 
 
