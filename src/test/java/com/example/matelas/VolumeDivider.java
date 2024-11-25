@@ -1,47 +1,54 @@
 package com.example.matelas;
 
+import com.example.matelas.model.block.BlockService;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class VolumeDivider {
-    public static List<Integer> divideVolume(double totalVolume, int parts) {
+    public static List<Double> divideVolume(double totalVolume, int parts) {
         if (totalVolume <= 0 || parts <= 0) {
             throw new IllegalArgumentException("Total volume and parts must be greater than 0.");
         }
 
-        List<Integer> volumes = new ArrayList<>();
+        List<Double> volumes = new ArrayList<>();
         Random random = new Random();
         double remainingVolume = totalVolume;
 
-        // Generate random weights
+        // Generate random weights for each part
         List<Double> weights = new ArrayList<>();
         for (int i = 0; i < parts; i++) {
             weights.add(random.nextDouble());
         }
 
-        // Normalize weights to sum to 1
+        // Normalize weights so they sum to 1
         double weightSum = weights.stream().mapToDouble(Double::doubleValue).sum();
         for (int i = 0; i < weights.size(); i++) {
             weights.set(i, weights.get(i) / weightSum);
         }
 
-        // Assign volumes based on weights
+        // Assign volumes based on normalized weights
         for (int i = 0; i < parts - 1; i++) {
-            int part = (int) Math.round(weights.get(i) * totalVolume);
-            part = Math.max(1, Math.min(part, (int) remainingVolume - (parts - i - 1))); // Ensure each part >= 1
-            volumes.add(part);
+            double part = weights.get(i) * totalVolume;
+            part = Math.max(0.01, Math.min(part, remainingVolume - (parts - i - 1) * 0.01)); // Ensure each part >= 0.01
+            volumes.add(roundToTwoDecimalPlaces(part));
             remainingVolume -= part;
         }
 
-        // Ensure the last part matches the remaining volume
-        volumes.add((int) Math.round(remainingVolume));
+        // Assign the last part as the remaining volume and round to two decimal places
+        volumes.add(roundToTwoDecimalPlaces(remainingVolume));
 
-        // Shuffle to mix the values
+        // Shuffle the volumes to mix the values
         Collections.shuffle(volumes);
 
         return volumes;
+    }
+
+    // Helper method to round to two decimal places
+    private static double roundToTwoDecimalPlaces(double value) {
+        return Math.round(value * 100.0) / 100.0;
     }
 
     public static double[] generateDimensions(double volume) {
@@ -74,14 +81,10 @@ public class VolumeDivider {
         return new double[]{1, 1, volume};
     }
     public static void main(String[] args) {
-            int totalVolume = 100;
-            int parts = 50;
-            double[] dim = generateDimensions(totalVolume);
-            List<Integer> dividedVolumes = divideVolume(totalVolume, parts);
-
-            // Print out the divided volumes
-            System.out.println("Divided volumes: " + dividedVolumes);
-            System.out.println("Sum: " + dividedVolumes.stream().mapToInt(Integer::intValue).sum());
+            List<Double> volumes = divideVolume(100, 50);
+            for (Double d : volumes) {
+                System.out.println(d);
+            }
         }
     }
 

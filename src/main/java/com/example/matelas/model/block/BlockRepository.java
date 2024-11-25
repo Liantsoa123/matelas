@@ -76,6 +76,30 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
             "    ABS(SUM(block.prix_revient) - SUM(block.prix_theorique)) ASC;" , nativeQuery = true)
     List<Object[]> findAllBlocksGroupedByMachineNative( @Param("year") int year );
 
-
+    @Query(value =
+            "WITH volume_possible AS (" +
+                    "    SELECT " +
+                    "        apm.matiere_premier_id, " +
+                    "        mp.nom AS matiere_nom, " +
+                    "        fd.quantite AS quantite_par_formule, " +
+                    "        SUM(apm.quantite) AS total_achetee, " +
+                    "        (SUM(apm.quantite) / fd.quantite) AS volume_possible " +
+                    "    FROM " +
+                    "        achat_matiere_premiere apm " +
+                    "    JOIN " +
+                    "        formule_details fd ON apm.matiere_premier_id = fd.matiere_premier_id " +
+                    "    JOIN " +
+                    "        matiere_premier mp ON mp.id = apm.matiere_premier_id " +
+                    "    WHERE " +
+                    "        fd.formule_id = 1 " +
+                    "    GROUP BY " +
+                    "        apm.matiere_premier_id, fd.quantite, mp.nom " +
+                    ") " +
+                    "SELECT " +
+                    "    MIN(volume_possible) AS max_volume_possible " +
+                    "FROM " +
+                    "    volume_possible",
+            nativeQuery = true)
+    double getMaxVolumePossible();
 
 }

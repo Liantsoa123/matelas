@@ -142,13 +142,6 @@ public class BlockService {
         return prixRevient;
     }
 
-    /*@Transactional
-    public void importCsv (  String csvPath  ){
-        String query = csvService.cvsToQueryBlock(csvPath);
-        System.out.println("Query = "+query);
-        entityManager.createNativeQuery(query).executeUpdate();
-        System.out.println("Insertion finished");
-    }*/
 
     @Transactional
     public void importCsv(String query) {
@@ -156,9 +149,6 @@ public class BlockService {
         System.out.println("Insertion finished");
     }
 
-    /*public List<BlockGroupDTO> getAllBlocksGroupedByMachine() {
-        return blockRepository.findAllBlocksGroupedByMachine();
-    }*/
 
     public List<BlockGroupDTO> getAllBlocksGroupedByMachine() {
         List<Object[]> results = blockRepository.findAllBlocksGroupedByMachineNative();
@@ -201,6 +191,10 @@ public class BlockService {
             prixRevientTotal += block.getPrixRevient();
         }
         return prixRevientTotal / volumeTotal;
+    }
+
+    public double maxVolume() {
+        return blockRepository.getMaxVolumePossible();
     }
 
 }

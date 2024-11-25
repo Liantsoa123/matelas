@@ -5,6 +5,8 @@ import com.example.matelas.model.achat.AchatMatierePremiereService;
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.formuleDetails.FormuleDetails;
+import com.example.matelas.model.formuleDetails.FormuleDetailsService;
+import com.example.matelas.model.util.RandomUtils;
 import com.example.matelas.model.util.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.csv.CSVFormat;
@@ -37,10 +40,12 @@ public class CsvService {
     final double MIN_LARGEUR = 5.0, MAX_LARGEUR = 7.0;
     final double MIN_EPAISSEUR = 10.0, MAX_EPAISSEUR = 15.0;
     final double MIN_VARIATION = 0.9, MAX_VARIATION = 1.1;
+    private final FormuleDetailsService formuleDetailsService;
 
-    public CsvService(BlockService blockService, AchatMatierePremiereService achatMatierePremiereService) {
+    public CsvService(BlockService blockService, AchatMatierePremiereService achatMatierePremiereService, FormuleDetailsService formuleDetailsService) {
         this.blockService = blockService;
         this.achatMatierePremiereService = achatMatierePremiereService;
+        this.formuleDetailsService = formuleDetailsService;
     }
 
     public String cvsToQueryBlock(InputStream inputStream, List<FormuleDetails> formuleDetails) {
@@ -174,18 +179,58 @@ public class CsvService {
     }
 
 
-    public String generataBlockQueryWithReste(int numblock , double prixVolumique , long minMachineId, long maxMachineId, String filePath) throws Exception {
+    public String generateBlockQueryWithReste(int numblock , double prixVolumique , int minMachineId, int maxMachineId, String filePath) throws Exception {
         List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
+        List<FormuleDetails> formuleDetails = formuleDetailsService.getAllFormuleDetails();
         StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id, prix_theorique) VALUES ");
         try {
+            double maxVolume = blockService.maxVolume();
+            if (maxVolume <= 0 ){
+                throw new  RuntimeException("reste stock = 0 ") ;
+            }else {
+                List<Double> volumes = RandomUtils.divideVolume(numblock, numblock);
+                Random random = new Random();
+                int id = 1 ;
+                for (Double volmue : volumes){
+                    double [] dimensions = RandomUtils.generateDimensions(volmue);
+                    double longueur = dimensions[0];
+                    double largeur = dimensions[1];
+                    double epaisseur = dimensions[2];
+                    double prix_revient = prixVolumique * volmue;
+                    long machine_id = random.nextInt(minMachineId, maxMachineId);
 
+                    // Generate a random date between startDate and endDate
+                    long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+                    LocalDate randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(daysBetween + 1));
+                    Date creation_block = Date.valueOf(randomDate) ;
+                    String name = "Bock"+id ;
 
+                    double prixTheorique = blockService.getprixRevientTheorique(creation_block, volmue, formuleDetails , achatMatierePremiereList);
+                    // Append the values to the query
+                    query.append("(")
+                            .append(longueur).append(", ")
+                            .append(largeur).append(", ")
+                            .append(epaisseur).append(", ")
+                            .append(prix_revient).append(", ")
+                            .append("'").append(creation_block).append("', ")
+                            .append("'").append(name).append("', ")
+                            .append(machine_id).append(", ")
+                            .append(prixTheorique).append("), ");
+                    System.out.println("ligne id = " + id);
+                    id++;
+                    return  query.toString();
+            }
+                // Remove trailing comma and space
+                if (query.length() > 0) {
+                    query.setLength(query.length() - 2);
+                }
+                return query.toString();
+            }
         } catch (Exception e) {
             // Log any errors that happen outside the loop (like CSV parsing issues)
-            System.err.println("Error processing the CSV file: " + e.getMessage());
-            throw new RuntimeException("Error processing the CSV file: " + e.getMessage(), e);
+            System.err.println("Error generating the CSV file: " + e.getMessage());
+            throw new RuntimeException("Error generating  the CSV file: " + e.getMessage(), e);
         }
-        return query.toString();
     }
 
 

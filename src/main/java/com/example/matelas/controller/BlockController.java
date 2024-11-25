@@ -127,7 +127,8 @@ public class BlockController {
         String filePath = "C:\\Users\\rakot\\OneDrive\\Documents\\S5\\Architecture Logiciel\\matelas\\Data\\GeneratedCSV\\blocks.csv";
 
         try {
-            csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
+            String query = csvService.generateBlockQueryWithReste(numBlock, prixVolumique, 1, 4, filePath);
+            System.out.println(query);
             model.addAttribute("messageG", "CSV file generated successfully at: " + filePath);
         } catch (Exception e) {
             model.addAttribute("errorG", "Error generating CSV file: " + e.getMessage());
