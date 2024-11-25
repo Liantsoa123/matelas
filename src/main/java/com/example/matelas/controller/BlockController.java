@@ -116,8 +116,10 @@ public class BlockController {
 
         if ( year == 0 ){
             blockGroupDTOS = blockService.getAllBlocksGroupedByMachine();
+            model.addAttribute("annee" , "Tous");
         }else {
             blockGroupDTOS = blockService.getAllBlocksGroupedByMachine(year);
+            model.addAttribute("annee" , year);
         }
         model.addAttribute("blockGroupDTO" , blockGroupDTOS);
         return "blockmachinelist";
@@ -130,9 +132,9 @@ public class BlockController {
 
         try {
             csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
-            model.addAttribute("message", "CSV file generated successfully at: " + filePath);
+            model.addAttribute("messageG", "CSV file generated successfully at: " + filePath);
         } catch (Exception e) {
-            model.addAttribute("error", "Error generating CSV file: " + e.getMessage());
+            model.addAttribute("errorG", "Error generating CSV file: " + e.getMessage());
         }
 
         model.addAttribute("block", new Block());

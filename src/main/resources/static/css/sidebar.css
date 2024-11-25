@@ -1,35 +1,50 @@
 /* sidebar.css */
 .sidebar {
-    width: 200px;
+    width: 240px;
     height: 100vh;
     background-color: #333;
     color: #fff;
     position: fixed;
+    top: 0;
+    left: 0;
     padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
 }
 
 .sidebar h2 {
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.8em;
     margin-bottom: 20px;
+    color: #f0f0f0;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar li {
-    padding: 10px;
-    text-align: center;
+    margin: 10px 0;
 }
 
 .sidebar li a {
+    display: block;
+    padding: 12px 20px;
     color: #fff;
     text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 4px;
 }
 
-.sidebar li a:hover {
+.sidebar li a:hover,
+.sidebar li a:focus {
     background-color: #444;
-    padding: 10px;
+    color: #e0e0e0;
+}
+
+.sidebar li:not(:last-child) {
+    border-bottom: 1px solid #444;
 }
