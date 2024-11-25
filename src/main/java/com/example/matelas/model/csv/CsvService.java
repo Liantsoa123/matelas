@@ -179,7 +179,7 @@ public class CsvService {
     }
 
 
-    public String generateBlockQueryWithReste(int numblock , double prixVolumique , int minMachineId, int maxMachineId, String filePath) throws Exception {
+    public String generateBlockQueryWithReste(int numblock , double prixVolumique , int minMachineId, int maxMachineId) throws Exception {
         List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
         List<FormuleDetails> formuleDetails = formuleDetailsService.getAllFormuleDetails();
         StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id, prix_theorique) VALUES ");
