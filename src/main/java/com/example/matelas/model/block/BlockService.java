@@ -1,11 +1,9 @@
 package com.example.matelas.model.block;
 
 import com.example.matelas.dto.blockgroupbymachinedto.BlockGroupDTO;
-import com.example.matelas.dto.restesstockdto.RestesStockDTO;
 import com.example.matelas.model.achat.AchatMatierePremiere;
 import com.example.matelas.model.achat.AchatMatierePremiereService;
 import com.example.matelas.model.csv.CsvService;
-import com.example.matelas.dto.restesstockdto.RestesStockService;
 import com.example.matelas.model.formuleDetails.FormuleDetails;
 import com.example.matelas.model.matierepremier.MatierePremierService;
 import com.example.matelas.model.sortie.SortieMatierePremiere;
@@ -186,5 +184,8 @@ public class BlockService {
         )).collect(Collectors.toList());
     }
 
+    public  List<Block>  getBlockWithLimit(int limit ){
+        return blockRepository.getBlockWithLimit(limit);
+    }
 
 }

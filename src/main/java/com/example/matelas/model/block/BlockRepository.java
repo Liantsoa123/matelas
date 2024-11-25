@@ -70,4 +70,8 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
             "    ABS(SUM(block.prix_revient) - SUM(block.prix_theorique)) ASC;" , nativeQuery = true)
     List<Object[]> findAllBlocksGroupedByMachineNative( @Param("year") int year );
 
+
+    @Query(value = "select s from block as s limit :limit ;")
+    List<Block>  getBlockWithLimit(@Param("limit")  int limit);
+
 }
