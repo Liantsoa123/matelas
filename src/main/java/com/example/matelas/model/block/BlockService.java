@@ -29,7 +29,6 @@ public class BlockService {
     private final BlockRepository blockRepository;
 
     private final TransformationService transformationService;
-    private final RestesStockService restesStockService;
 
     private final EntityManager entityManager;
     private final MatierePremierService matierePremierService;
@@ -37,11 +36,10 @@ public class BlockService {
     private final AchatMatierePremiereService achatMatierePremiereService;
 
     @Autowired
-    public BlockService(BlockRepository blockRepository, @Lazy TransformationService transformationService, EntityManager entityManager, RestesStockService restesStockService, MatierePremierService matierePremierService, SortieMatierePremiereService sortieMatierePremiereService, AchatMatierePremiereService achatMatierePremiereService) {
+    public BlockService(BlockRepository blockRepository, @Lazy TransformationService transformationService, EntityManager entityManager, MatierePremierService matierePremierService, SortieMatierePremiereService sortieMatierePremiereService, AchatMatierePremiereService achatMatierePremiereService) {
         this.blockRepository = blockRepository;
         this.transformationService = transformationService;
         this.entityManager = entityManager;
-        this.restesStockService = restesStockService;
         this.matierePremierService = matierePremierService;
         this.sortieMatierePremiereService = sortieMatierePremiereService;
         this.achatMatierePremiereService = achatMatierePremiereService;
