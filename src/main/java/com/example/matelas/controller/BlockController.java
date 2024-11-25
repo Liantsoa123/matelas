@@ -123,6 +123,20 @@ public class BlockController {
         return "blockmachinelist";
     }
 
+    @PostMapping("/generateBlockCSV")
+    public String generateBlockCSV(@RequestParam("numBlock") int numBlock, Model model) {
+        double prixVolumique = blockService.prixRevientVolumique(4); // Example usage
+        String filePath = "C:\\Users\\rakot\\OneDrive\\Documents\\S5\\Architecture Logiciel\\matelas\\GeneratedCSV\\blocks.csv";
 
+        try {
+            csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
+            model.addAttribute("message", "CSV file generated successfully at: " + filePath);
+        } catch (Exception e) {
+            model.addAttribute("error", "Error generating CSV file: " + e.getMessage());
+        }
+
+        model.addAttribute("block", new Block());
+        return "block";
+    }
 
 }

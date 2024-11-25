@@ -58,5 +58,17 @@
     <button type="submit">Import</button>
 </form>
 </div>
+
+<div class="form" >
+    <h1>Generate  Csv</h1>
+    <form th:action="@{/generateBlockCSV}"  method="post"   >
+        <p th:text="${error}" style="color: red" > </p>
+        <label for="numbreBlock"> Enter the numbre of block   </label>
+        <input type="number"  id="numbreBlock"  name="numBlock"  >
+        <br>
+        <button type="submit">Generate</button>
+    </form>
+</div>
+
 </body>
 </html>

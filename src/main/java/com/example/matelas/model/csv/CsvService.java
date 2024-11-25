@@ -9,13 +9,16 @@ import com.example.matelas.model.util.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.DoubleBuffer;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -31,71 +34,6 @@ public class CsvService {
         this.blockService = blockService;
         this.achatMatierePremiereService = achatMatierePremiereService;
     }
-   /* public String cvsToQueryBlock(String filePath) {
-        StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name , machine_id) VALUES ");
-
-        try (FileReader reader = new FileReader(filePath);
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
-
-            for (CSVRecord record : csvParser) {
-                query.append("(")
-                        .append(record.get("longueur")).append(", ")
-                        .append(record.get("largeur")).append(", ")
-                        .append(record.get("epaisseur")).append(", ")
-                        .append(record.get("prix_revient")).append(", ")
-                        .append("'").append(record.get("creation_block")).append("', ")
-                        .append("'").append(record.get("name")).append("',")
-                        .append(record.get("machine_id")).append("), ");
-            }
-
-            // Remove trailing comma and space
-            if (query.length() > 0) {
-                query.setLength(query.length() - 2);
-            }
-
-        } catch (IOException e) {
-            System.err.println("Error reading the CSV file: " + e.getMessage());
-        }
-
-        return query.toString();
-    }*/
-
-    /*public String cvsToQueryBlock(InputStream inputStream , List<FormuleDetails> formuleDetails ) {
-        StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id , prix_theorique) VALUES ");
-
-        try (CSVParser csvParser = new CSVParser(new InputStreamReader(inputStream), CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
-
-            for (CSVRecord record : csvParser) {
-
-                double volume = Double.parseDouble(record.get("longueur")) * Double.parseDouble(record.get("largeur")) * Double.parseDouble(record.get("epaisseur"));
-                double prixTheorique = blockService.getprixRevientTheorique(StringUtils.convertStringToDate(record.get("creation_block")), volume ,formuleDetails  );
-                System.out.println("prixTheorique = "+prixTheorique);
-
-                String name = record.get("name") ;
-                query.append("(")
-                        .append(record.get("longueur")).append(", ")
-                        .append(record.get("largeur")).append(", ")
-                        .append(record.get("epaisseur")).append(", ")
-                        .append(record.get("prix_revient")).append(", ")
-                        .append("'").append(record.get("creation_block")).append("', ")
-                        .append("'").append(name).append("', ")
-                        .append(record.get("machine_id")).append(", ")
-                        .append(prixTheorique).append("), ");
-            }
-
-            // Remove trailing comma and space
-            if (query.length() > 0) {
-                query.setLength(query.length() - 2);
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error processing the CSV file: " + e.getMessage());
-            throw new RuntimeException("Error processing the CSV file: " + e.getMessage());
-        }
-
-        return query.toString();
-    }*/
-
 
     public String cvsToQueryBlock(InputStream inputStream, List<FormuleDetails> formuleDetails) {
         System.out.println("achatMatierePremiereList = " );
@@ -164,34 +102,76 @@ public class CsvService {
 
 
 
-
-    public String cvsToQueryAchat(InputStream inputStream) {
-        StringBuilder query = new StringBuilder("INSERT INTO achat_matiere_premiere (date_achat, matiere_premier_id, prix_revient, quantite) VALUES ");
-
-        try (CSVParser csvParser = new CSVParser(new InputStreamReader(inputStream), CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
-
-            for (CSVRecord record : csvParser) {
-                query.append("(")
-                        .append("'").append(record.get("date_achat")).append("', ") // Ensure proper quoting for string values
-                        .append(record.get("matiere_premier_id")).append(", ")
-                        .append(record.get("prix_revient")).append(", ")
-                        .append(record.get("quantite"))
-                        .append("), ");
-            }
-
-            // Remove trailing comma and space
-            if (query.length() > 0) {
-                query.setLength(query.length() - 2);
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error processing the CSV file: " + e.getMessage());
-            throw new RuntimeException("Error processing the CSV file: " + e.getMessage());
+    //GENERATE CSV RANDOM FOR BLOCK
+    final LocalDate startDate = LocalDate.of(2022, 1, 1);
+    final LocalDate endDate = LocalDate.of(2024, 12, 31);
+    // Constantes pour les bornes
+    final double MIN_LONGUEUR = 20.0, MAX_LONGUEUR = 25.0;
+    final double MIN_LARGEUR = 5.0, MAX_LARGEUR = 7.0;
+    final double MIN_EPAISSEUR = 10.0, MAX_EPAISSEUR = 15.0;
+    final double MIN_VARIATION = 0.9, MAX_VARIATION = 1.1;
+    public void genererBlockCSV(int numBlocks, double prixVolumique, long minMachineId, long maxMachineId, String filePath) throws Exception {
+        if (numBlocks <= 0 || minMachineId > maxMachineId) {
+            throw new IllegalArgumentException("Invalid input parameters.");
         }
 
-        return query.toString();
-    }
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        List<String> csvLines = new ArrayList<>(numBlocks);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+
+        for (int i = 1; i <= numBlocks; i++) {
+            // Generate block name
+            String blocName = "Bloc " + i;
+
+            // Generate dimensions
+            double longueur = Math.round((MIN_LONGUEUR + random.nextDouble() * (MAX_LONGUEUR - MIN_LONGUEUR)) * 100.0) / 100.0;
+            double largeur = Math.round((MIN_LARGEUR + random.nextDouble() * (MAX_LARGEUR - MIN_LARGEUR)) * 100.0) / 100.0;
+            double epaisseur = Math.round((MIN_EPAISSEUR + random.nextDouble() * (MAX_EPAISSEUR - MIN_EPAISSEUR)) * 100.0) / 100.0;
+
+            // Calculate volume and production cost
+            double volume = longueur * largeur * epaisseur;
+            double variation = MIN_VARIATION + random.nextDouble() * (MAX_VARIATION - MIN_VARIATION);
+            variation = Math.round(variation * 10.0) / 10.0;
+            double prix_revient = prixVolumique * volume * variation;
+
+            // Generate machine ID
+            long machineId = random.nextLong(minMachineId, maxMachineId + 1);
+
+            // Generate a random date between startDate and endDate
+            long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+            LocalDate randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(daysBetween + 1));
+
+            // Add CSV line
+            csvLines.add(String.format(Locale.US,
+                    "%s,%.2f,%.2f,%.2f,%.2f,%d,%s",
+                    blocName, longueur, largeur, epaisseur, prix_revient, machineId, randomDate.format(formatter)));
+        }
+
+        // Ensure the parent directories of the file exist
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            if (!parentDir.mkdirs()) {
+                throw new IOException("Failed to create directories for file path: " + filePath);
+            }
+        }
+
+        // Write data to a CSV file
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("name,longueur,largeur,epaisseur,prix_revient,machine_id,creation_block\n");
+            int progession = 0 ;
+            for (String line : csvLines) {
+                writer.write(line + "\n");
+                System.out.println("Generated at line = "  + progession );
+                progession++;
+            }
+            System.out.println("CSV file generated: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Error generating CSV file: " + e.getMessage());
+            throw new Exception("Error generating CSV file: " + e.getMessage());
+        }
+    }
 
 
 }

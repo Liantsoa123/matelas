@@ -13,6 +13,8 @@ import com.example.matelas.model.transformation.TransformationService;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,8 +186,21 @@ public class BlockService {
         )).collect(Collectors.toList());
     }
 
-    public  List<Block>  getBlockWithLimit(int limit ){
-        return blockRepository.getBlockWithLimit(limit);
+
+    public List<Block> getBlockWithLimit(int limit) {
+        Pageable pageable = PageRequest.of(0, limit); // Page 0, 'limit' items per page
+        return blockRepository.getBlockWithLimit(pageable);
+    }
+
+    public double prixRevientVolumique(int nbLine) {
+        double prixRevientTotal = 0;
+        double volumeTotal = 0;
+        List<Block> blocks = getBlockWithLimit(nbLine);
+        for (Block block : blocks) {
+            volumeTotal += block.volume();
+            prixRevientTotal += block.getPrixRevient();
+        }
+        return prixRevientTotal / volumeTotal;
     }
 
 }

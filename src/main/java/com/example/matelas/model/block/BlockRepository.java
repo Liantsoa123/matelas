@@ -3,6 +3,7 @@ package com.example.matelas.model.block;
 import com.example.matelas.dto.blockgroupbymachinedto.BlockGroupDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,11 @@ import java.util.Optional;
 
 @Repository
 public interface BlockRepository extends JpaRepository<Block, Integer> {
+
+
+    @Query("SELECT b FROM Block b")
+    List<Block> getBlockWithLimit(Pageable pageable);
+
 
     @Query("SELECT b FROM Block b WHERE b.mere.id = :mereId")
     Optional<Block> findBlocksByMereId(@Param("mereId") int mereId);
@@ -71,7 +77,5 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
     List<Object[]> findAllBlocksGroupedByMachineNative( @Param("year") int year );
 
 
-    @Query(value = "select s from block as s limit :limit ;")
-    List<Block>  getBlockWithLimit(@Param("limit")  int limit);
 
 }

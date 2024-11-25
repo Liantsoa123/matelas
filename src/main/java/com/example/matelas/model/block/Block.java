@@ -129,7 +129,4 @@ public class Block {
         this.machine = machine;
     }
 
-   /* public double prixTheorique(){
-
-    }*/
 }
