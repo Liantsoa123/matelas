@@ -1,3 +1,4 @@
+/*
 package com.example.matelas.dto.restesstockdto;
 
 import com.example.matelas.model.achat.AchatMatierePremiere;
@@ -51,3 +52,4 @@ public class RestesStockDTO {
         this.dateAchatMatierePremiere = dateAchatMatierePremiere;
     }
 }
+*/
