@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.DoubleBuffer;
 import java.sql.Date;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -127,7 +128,7 @@ public class CsvService {
 
         for (int i = 1; i <= numBlocks; i++) {
             // Generate block name
-            String blocName = "Bloc " + i;
+            String blocName = "Block" + i;
 
             // Generate dimensions
             double longueur = Math.round((MIN_LONGUEUR + random.nextDouble() * (MAX_LONGUEUR - MIN_LONGUEUR)) * 100.0) / 100.0;
@@ -143,9 +144,13 @@ public class CsvService {
             // Generate machine ID
             long machineId = random.nextLong(minMachineId, maxMachineId + 1);
 
-            // Generate a random date between startDate and endDate
-            long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-            LocalDate randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(daysBetween + 1));
+            // Générer une date aléatoire entre startDate et endDate
+            LocalDate randomDate = null;
+            do {
+                long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+                randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(daysBetween + 1));
+            } while (randomDate.getDayOfWeek() == DayOfWeek.SATURDAY || randomDate.getDayOfWeek() == DayOfWeek.SUNDAY);
+
 
             // Add CSV line
             csvLines.add(String.format(Locale.US,
@@ -200,9 +205,14 @@ public class CsvService {
                     long machine_id = random.nextInt(minMachineId, maxMachineId);
 
                     // Generate a random date between startDate and endDate
-                    long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-                    LocalDate randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(daysBetween + 1));
+                    LocalDate randomDate = null;
+                    do {
+                        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+                        randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(daysBetween + 1));
+                    } while (randomDate.getDayOfWeek() == DayOfWeek.SATURDAY || randomDate.getDayOfWeek() == DayOfWeek.SUNDAY);
                     Date creation_block = Date.valueOf(randomDate) ;
+
+                    //Block name
                     String name = "Bock"+id ;
 
                     double prixTheorique = blockService.getprixRevientTheorique(creation_block, volmue, formuleDetails , achatMatierePremiereList);
