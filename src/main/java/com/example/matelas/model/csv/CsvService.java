@@ -49,8 +49,7 @@ public class CsvService {
         this.formuleDetailsService = formuleDetailsService;
     }
 
-    public String cvsToQueryBlock(InputStream inputStream, List<FormuleDetails> formuleDetails) {
-        List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
+    public String cvsToQueryBlock(InputStream inputStream, List<FormuleDetails> formuleDetails , List<AchatMatierePremiere> achatMatierePremiereList )   {
         StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id, prix_theorique) VALUES ");
         try (CSVParser csvParser = new CSVParser(new InputStreamReader(inputStream), CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
             int id = 1 ;
@@ -108,7 +107,6 @@ public class CsvService {
             System.err.println("Error processing the CSV file: " + e.getMessage());
             throw new RuntimeException("Error processing the CSV file: " + e.getMessage(), e);
         }
-//        achatMatierePremiereService.saveAllAchatMatierePremieres(achatMatierePremiereList);
         return query.toString();
     }
 
@@ -116,9 +114,13 @@ public class CsvService {
 
 
     //GENERATE CSV RANDOM FOR BLOCK
-    public void genererBlockCSV(int numBlocks, double prixVolumique, long minMachineId, long maxMachineId, String filePath) throws Exception {
+    public void genererBlockCSV(int numBlocks, Double prixVolumique, long minMachineId, long maxMachineId, String filePath) throws Exception {
         if (numBlocks <= 0 || minMachineId > maxMachineId) {
             throw new IllegalArgumentException("Invalid input parameters.");
+        }
+
+        if ( prixVolumique == 0 || prixVolumique.isNaN() ){
+            throw new Exception("Prix Volumique 0");
         }
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -184,12 +186,18 @@ public class CsvService {
     }
 
 
-    public String generateBlockQueryWithReste(int numblock , double prixVolumique , int minMachineId, int maxMachineId) throws Exception {
-        List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
+    public String generateBlockQueryWithReste(int numblock , Double prixVolumique , int minMachineId, int maxMachineId , String filePath ,  List<AchatMatierePremiere> achatMatierePremiereList) throws Exception {
+
+        if ( prixVolumique == 0 || prixVolumique.isNaN() ){
+            throw new Exception("Prix Volumique 0");
+        }
+
         List<FormuleDetails> formuleDetails = formuleDetailsService.getAllFormuleDetails();
         StringBuilder query = new StringBuilder("INSERT INTO block (longueur, largeur, epaisseur, prix_revient, creation_block, name, machine_id, prix_theorique) VALUES ");
+        List<String> csvLines = new ArrayList<>(numblock);
         try {
             double maxVolume = blockService.maxVolume();
+            System.out.println("maxVolume = " + maxVolume);
             if (maxVolume <= 0 ){
                 throw new  RuntimeException("reste stock = 0 ") ;
             }else {
@@ -227,13 +235,42 @@ public class CsvService {
                             .append(machine_id).append(", ")
                             .append(prixTheorique).append("), ");
                     System.out.println("ligne id = " + id);
+                    // Add CSV line
+                    csvLines.add(String.format(Locale.US,
+                            "%s,%.2f,%.2f,%.2f,%.2f,%d,%s,%.2f",
+                            name, longueur, largeur, epaisseur, prix_revient, machine_id,creation_block , prixTheorique ));
                     id++;
-                    return  query.toString();
             }
                 // Remove trailing comma and space
                 if (query.length() > 0) {
                     query.setLength(query.length() - 2);
                 }
+
+                // Ensure the parent directories of the file exist
+                File file = new File(filePath);
+                File parentDir = file.getParentFile();
+                if (parentDir != null && !parentDir.exists()) {
+                    if (!parentDir.mkdirs()) {
+                        throw new IOException("Failed to create directories for file path: " + filePath);
+                    }
+                }
+
+                // Write data to a CSV file
+                try (FileWriter writer = new FileWriter(file)) {
+                    writer.write("name,longueur,largeur,epaisseur,prix_revient,machine_id,creation_block,prixTheorique\n");
+                    int progession = 0 ;
+                    for (String line : csvLines) {
+                        writer.write(line + "\n");
+                        System.out.println("Generated at line = "  + progession );
+                        progession++;
+                    }
+                    System.out.println("CSV file generated: " + file.getAbsolutePath());
+                } catch (IOException e) {
+                    System.err.println("Error generating CSV file: " + e.getMessage());
+                    throw new Exception("Error generating CSV file: " + e.getMessage());
+                }
+
+
                 return query.toString();
             }
         } catch (Exception e) {

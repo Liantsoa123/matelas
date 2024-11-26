@@ -1,12 +1,15 @@
 package com.example.matelas.controller;
 
 import com.example.matelas.dto.blockgroupbymachinedto.BlockGroupDTO;
+import com.example.matelas.model.achat.AchatMatierePremiere;
+import com.example.matelas.model.achat.AchatMatierePremiereService;
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
 import com.example.matelas.model.csv.CsvService;
 import com.example.matelas.model.formuleDetails.FormuleDetails;
 import com.example.matelas.model.formuleDetails.FormuleDetailsService;
 import com.example.matelas.model.transformation.TransformationService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,12 +33,14 @@ public class BlockController {
     private static final String UPLOADED_FOLDER = "uploads/";
     private final CsvService csvService;
     private final FormuleDetailsService formuleDetailsService;
+    private final AchatMatierePremiereService achatMatierePremiereService;
 
-    public BlockController(BlockService blockService, TransformationService transformationService, CsvService csvService, FormuleDetailsService formuleDetailsService) {
+    public BlockController(BlockService blockService, TransformationService transformationService, CsvService csvService, FormuleDetailsService formuleDetailsService, AchatMatierePremiereService achatMatierePremiereService) {
         this.blockService = blockService;
         this.transformationService = transformationService;
         this.csvService = csvService;
         this.formuleDetailsService = formuleDetailsService;
+        this.achatMatierePremiereService = achatMatierePremiereService;
     }
 
     // Handle the form submission
@@ -77,33 +84,39 @@ public class BlockController {
     }
 
     @PostMapping("/importCsv")
-    public String handleFileUpload(@RequestParam("filecsv") MultipartFile file, Model model) {
+    public String handleFileUpload( @RequestParam("path") String path ,  Model model) {
         System.out.println("uploading file");
-        if (file.isEmpty()) {
-            model.addAttribute("message", "No file selected for upload.");
-            return "upload";
-        }
-
         model.addAttribute("message", "Insertion Block");
-        model.addAttribute("block" , new Block());
+        model.addAttribute("block", new Block());
 
-        try {
-            // Process the file content without saving it
-            System.out.println("Processing file: " + file.getOriginalFilename());
-            String query = csvService.cvsToQueryBlock(file.getInputStream() , formuleDetailsService.getAllFormuleDetails());
-            System.out.println("Generated Query: " + query);
-            blockService.importCsv(query);
+        File file = new File(path);
 
-            System.out.println("File processed successfully!");
-            model.addAttribute("messageI" , "File processed successfully!");
-        } catch (Exception e) {
-           System.out.println( "File processing failed: " + e.getMessage());
-            model.addAttribute("error","File processing failed: " + e.getMessage() );
-
+        // Check if the file exists
+        if (!file.exists()) {
+            model.addAttribute("errorI" , "File not found at the given path: " + path);
+            return "block";
         }
-        return "block";
 
+        try (InputStream inputStream = new FileInputStream(file)) {
+            if (inputStream.available() == 0) {
+                model.addAttribute("message", "No file content provided for upload.");
+                return "block";
+            }
+            // Process the file content without saving it
+            List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
+            String query = csvService.cvsToQueryBlock(inputStream, formuleDetailsService.getAllFormuleDetails(), achatMatierePremiereList);
+            System.out.println("Generated Query: " + query);
+            blockService.importCsv(query, achatMatierePremiereList);
+            System.out.println("File processed successfully!");
+            model.addAttribute("messageI", "File processed successfully!");
+        } catch (Exception e) {
+            System.out.println("File processing failed: " + e.getMessage());
+            model.addAttribute("errorI", "File processing failed: " + e.getMessage());
+        }
+
+        return "block";
     }
+
 
 
     @GetMapping("/groupebymachienDate")
@@ -123,11 +136,14 @@ public class BlockController {
 
     @PostMapping("/generateBlockCSV")
     public String generateBlockCSV(@RequestParam("numBlock") int numBlock, Model model) {
-        double prixVolumique = blockService.prixRevientVolumique(4); // Example usage
+        Double prixVolumique = blockService.prixRevientVolumique(4);
         String filePath = "C:\\Users\\rakot\\OneDrive\\Documents\\S5\\Architecture Logiciel\\matelas\\Data\\GeneratedCSV\\blocks.csv";
-
+        List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
         try {
-            csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
+//            csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
+            String query = csvService.generateBlockQueryWithReste(numBlock , prixVolumique , 1 , 4 , filePath , achatMatierePremiereList );
+            System.out.println("query = " + query );
+            blockService.importCsv(query , achatMatierePremiereList);
             model.addAttribute("messageG", "CSV file generated successfully at: " + filePath);
         } catch (Exception e) {
             model.addAttribute("errorG", "Error generating CSV file: " + e.getMessage());

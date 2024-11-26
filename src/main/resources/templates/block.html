@@ -49,13 +49,12 @@
 
 <div class="form" >
 <h1>Import Csv</h1>
-<form th:action="@{/importCsv}"  method="post" enctype="multipart/form-data"  >
+<form th:action="@{/importCsv}"  method="post" >
     <p th:text="${errorI}" class="error"></p>
     <p th:text="${messageI}" class="success"></p>
 
     <label for="pathCsv"> Enter your file path </label>
-<!--    <input type="text" id="pathCsv" name="pathCsv" value="C:\Users\rakot\OneDrive\Documents\S5\Architecture Logiciel\matelas\csv\block.csv"  >-->
-    <input type="file"  id="pathCsv"  name="filecsv"  >
+    <input type="text" id="pathCsv" name="path" value="C:\Users\rakot\OneDrive\Documents\S5\Architecture Logiciel\matelas\Data\csv\Data 1M.csv"  >
     <br>
     <button type="submit">Import</button>
 </form>

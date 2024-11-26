@@ -122,7 +122,6 @@ public class BlockService {
         System.out.println("volume=" + volume);
         for (FormuleDetails formuleDetails1 : formuleDetails) {
             double quantiteIlaina = formuleDetails1.getQuantite() * volume;
-            System.out.println("volume ilaina = " + quantiteIlaina);
             for (AchatMatierePremiere achatMatierePremiere : achatMatierePremiereList) {
                 double ilainaachat = 0;
                 if (achatMatierePremiere.getMatierePremier().getId() == formuleDetails1.getMatierePremier().getId() && !achatMatierePremiere.getDateAchat().after(date)) {
@@ -133,7 +132,6 @@ public class BlockService {
                         prixRevient += ilainaachat * achatMatierePremiere.getPrixRevient();
                     }
                 }
-
             }
             if (quantiteIlaina > 0) {
                 throw new RuntimeException("Pas de stock suffisant pour la matiere premiere " + formuleDetails1.getMatierePremier().getNom());
@@ -144,8 +142,9 @@ public class BlockService {
 
 
     @Transactional
-    public void importCsv(String query) {
+    public void importCsv(String query , List<AchatMatierePremiere> achatMatierePremiereList ) {
         entityManager.createNativeQuery(query).executeUpdate();
+//        achatMatierePremiereService.saveAllAchatMatierePremieres(achatMatierePremiereList);
         System.out.println("Insertion finished");
     }
 
@@ -182,7 +181,7 @@ public class BlockService {
         return blockRepository.getBlockWithLimit(pageable);
     }
 
-    public double prixRevientVolumique(int nbLine) {
+    public Double prixRevientVolumique(int nbLine) {
         double prixRevientTotal = 0;
         double volumeTotal = 0;
         List<Block> blocks = getBlockWithLimit(nbLine);
