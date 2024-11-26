@@ -143,7 +143,7 @@ public class BlockController {
 //            csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
             String query = csvService.generateBlockQueryWithReste(numBlock , prixVolumique , 1 , 4 , filePath , achatMatierePremiereList );
             System.out.println("query = " + query );
-            blockService.importCsv(query , achatMatierePremiereList);
+//            blockService.importCsv(query , achatMatierePremiereList);
             model.addAttribute("messageG", "CSV file generated successfully at: " + filePath);
         } catch (Exception e) {
             model.addAttribute("errorG", "Error generating CSV file: " + e.getMessage());

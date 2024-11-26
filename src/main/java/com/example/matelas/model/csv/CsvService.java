@@ -65,7 +65,6 @@ public class CsvService {
                     Double prix_revient = Double.valueOf(record.get("prix_revient"));
 
                     Date creation_block = StringUtils.convertStringToDate(record.get("creation_block"));  // Assuming you have a utility method to convert string to date
-                    System.out.println("creation_block"+ creation_block.toString());
                     String name = "Block"+id; // Corrected here to get the actual name
 
                     int machine_id = Integer.parseInt(record.get("machine_id"));
@@ -75,7 +74,6 @@ public class CsvService {
                    double volume = longueur * largeur * epaisseur;
 
                    double prixTheorique = blockService.getprixRevientTheorique(creation_block, volume, formuleDetails , achatMatierePremiereList);
-
 
                     // Append the values to the query
                     query.append("(")
@@ -269,8 +267,6 @@ public class CsvService {
                     System.err.println("Error generating CSV file: " + e.getMessage());
                     throw new Exception("Error generating CSV file: " + e.getMessage());
                 }
-
-
                 return query.toString();
             }
         } catch (Exception e) {

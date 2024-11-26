@@ -119,7 +119,6 @@ public class BlockService {
 
     public double getprixRevientTheorique(Date date, double volume, List<FormuleDetails> formuleDetails, List<AchatMatierePremiere> achatMatierePremiereList) {
         double prixRevient = 0;
-        System.out.println("volume=" + volume);
         for (FormuleDetails formuleDetails1 : formuleDetails) {
             double quantiteIlaina = formuleDetails1.getQuantite() * volume;
             for (AchatMatierePremiere achatMatierePremiere : achatMatierePremiereList) {
