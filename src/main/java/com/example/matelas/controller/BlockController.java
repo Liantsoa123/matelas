@@ -139,10 +139,7 @@ public class BlockController {
     public String generateBlockCSV(@RequestParam("numBlock") int numBlock, Model model) {
         Double prixVolumique = blockService.prixRevientVolumique(4);
         String filePath = "C:\\Users\\rakot\\OneDrive\\Documents\\S5\\Architecture Logiciel\\matelas\\Data\\GeneratedCSV\\blocks.csv";
-        List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
         try {
-//            csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
-//            String query = csvService.generateBlockQueryWithReste(numBlock , prixVolumique , 1 , 4 , filePath , achatMatierePremiereList );
               Csv csv = new Csv();
               csv.generateBlockCSV(numBlock , prixVolumique , 1 , 4 , filePath);
 
@@ -150,7 +147,6 @@ public class BlockController {
         } catch (Exception e) {
             model.addAttribute("errorG", "Error generating CSV file: " + e.getMessage());
         }
-
         model.addAttribute("block", new Block());
         return "block";
     }
