@@ -5,6 +5,7 @@ import com.example.matelas.model.achat.AchatMatierePremiere;
 import com.example.matelas.model.achat.AchatMatierePremiereService;
 import com.example.matelas.model.block.Block;
 import com.example.matelas.model.block.BlockService;
+import com.example.matelas.model.csv.Csv;
 import com.example.matelas.model.csv.CsvService;
 import com.example.matelas.model.formuleDetails.FormuleDetails;
 import com.example.matelas.model.formuleDetails.FormuleDetailsService;
@@ -141,9 +142,10 @@ public class BlockController {
         List<AchatMatierePremiere> achatMatierePremiereList = achatMatierePremiereService.getAllAchatMatierePremieres();
         try {
 //            csvService.genererBlockCSV(numBlock, prixVolumique, 1, 4, filePath);
-            String query = csvService.generateBlockQueryWithReste(numBlock , prixVolumique , 1 , 4 , filePath , achatMatierePremiereList );
-            System.out.println("query = " + query );
-//            blockService.importCsv(query , achatMatierePremiereList);
+//            String query = csvService.generateBlockQueryWithReste(numBlock , prixVolumique , 1 , 4 , filePath , achatMatierePremiereList );
+              Csv csv = new Csv();
+              csv.generateBlockCSV(numBlock , prixVolumique , 1 , 4 , filePath);
+
             model.addAttribute("messageG", "CSV file generated successfully at: " + filePath);
         } catch (Exception e) {
             model.addAttribute("errorG", "Error generating CSV file: " + e.getMessage());

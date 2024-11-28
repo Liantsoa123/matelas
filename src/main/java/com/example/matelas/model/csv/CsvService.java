@@ -118,7 +118,7 @@ public class CsvService {
         }
 
         if ( prixVolumique == 0 || prixVolumique.isNaN() ){
-            throw new Exception("Prix Volumique 0");
+            throw new Exception("the prixVolumique should not be 0 ");
         }
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
